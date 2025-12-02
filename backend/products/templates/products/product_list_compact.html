@@ -1,0 +1,42 @@
+{# Compact horizontal product list used on home / recommendations - image left, details right #}
+{% for product in products %}
+  <div class="product-compact d-flex align-items-center p-3 mb-3 rounded shadow-sm bg-white">
+    <a href="{% url 'products:product_detail' product.slug %}" class="d-block" style="width:120px;flex:0 0 120px;">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded" style="height:80px; width:120px; object-fit:cover;">
+      {% else %}
+        <div class="img-fluid rounded" style="height:80px; width:120px; background:linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:0.65rem; text-align:center; padding:6px;">{{ product.name|truncatechars:20 }}</div>
+      {% endif %}
+    </a>
+
+    <div class="flex-grow-1 ms-3">
+      <div class="d-flex justify-content-between align-items-start mb-1">
+        <div>
+          <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none text-dark fw-semibold product-compact-title">{{ product.name }}</a>
+          <div class="small muted mt-1">{% if product.category %}{{ product.category.name }}{% endif %}</div>
+        </div>
+        <div class="text-end">
+          <div class="product-price">{{ product.price }} <small class="muted">DH</small></div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-2">
+        <form action="{% url 'products:cart_add' %}" method="post" class="d-flex gap-2 align-items-center js-add-to-cart">
+          {% csrf_token %}
+          <input type="hidden" name="slug" value="{{ product.slug }}">
+          <input type="hidden" name="quantity" value="1">
+          <button class="btn btn-primary-ebb btn-sm" type="submit">Ajouter</button>
+        </form>
+
+        <div class="d-flex gap-2 align-items-center">
+          {% if product.id %}
+            <a href="{% url 'products:product_sizes' product.id %}" class="btn btn-outline-secondary btn-sm">Voir tailles</a>
+          {% else %}
+            <button class="btn btn-outline-secondary btn-sm" disabled>Voir tailles</button>
+          {% endif %}
+          <div class="small muted">Livraison rapide</div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}

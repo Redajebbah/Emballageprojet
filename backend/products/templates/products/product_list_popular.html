@@ -1,0 +1,30 @@
+{# Partial: popular slider items - small cards for carousel / slider #}
+{% for product in products %}
+  <div class="popular-slide-item" style="--i:{{ forloop.counter0 }};">
+    <div class="card-ep small-card">
+      <a href="{% url 'products:product_detail' product.slug %}" class="d-block text-reset text-decoration-none">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="popular-thumb">
+        {% else %}
+          <div class="popular-thumb" style="background:linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:0.7rem; text-align:center; padding:6px;">{{ product.name }}</div>
+        {% endif %}
+      </a>
+
+      <div class="popular-body p-2">
+        <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none text-dark">
+          <div class="popular-name small fw-semibold">{{ product.name|truncatechars:36 }}</div>
+        </a>
+
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <div class="popular-price">{{ product.price }} <small class="muted">{{ product.currency|default:'DH' }}</small></div>
+          <form action="{% url 'products:cart_add' %}" method="post" class="mb-0">
+            {% csrf_token %}
+            <input type="hidden" name="slug" value="{{ product.slug }}">
+            <input type="hidden" name="quantity" value="1">
+            <button class="btn btn-primary-ebb btn-sm" type="submit">Ajouter</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}

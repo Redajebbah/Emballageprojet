@@ -1,0 +1,72 @@
+{# Partial: product card grid content. expects `products` in context #}
+{% for product in products %}
+  <div class="product-card {% if not product.in_stock %}out-of-stock-card{% endif %}" style="display:flex; flex-direction:column; background:white; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.2s, box-shadow 0.2s; cursor:pointer; position:relative;">
+
+    <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none text-reset" style="display:block; position:relative;">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%; height:200px; object-fit:cover; display:block; {% if not product.in_stock %}filter: grayscale(30%) opacity(0.7);{% endif %}">
+      {% else %}
+        <div style="width:100%; height:200px; background:linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:0.75rem; text-align:center; padding:8px;">{{ product.name }}</div>
+      {% endif %}
+
+      {# Out of stock overlay #}
+      {% if not product.in_stock %}
+      <div style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(201,166,107,0.92), rgba(139,111,71,0.88)); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(2px);">
+        <div style="text-align:center; color:white; padding:20px;">
+          <svg width="48" height="48" fill="currentColor" viewBox="0 0 16 16" style="margin-bottom:12px; opacity:0.9;">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+          </svg>
+          <div style="font-size:18px; font-weight:800; letter-spacing:1px; margin-bottom:4px; text-shadow:0 2px 4px rgba(0,0,0,0.2);">RUPTURE DE STOCK</div>
+          <div style="font-size:12px; opacity:0.95; font-weight:500;">Produit temporairement indisponible</div>
+        </div>
+      </div>
+      {% endif %}
+
+      {# badges: promo in top-right corner #}
+      {% if product.old_price %}
+      <div style="position:absolute; top:12px; right:12px; z-index:5; pointer-events:none;">
+        <span style="background:linear-gradient(135deg, #C9A66B, #8B6F47); color:white; padding:6px 14px; border-radius:20px; font-size:0.75rem; font-weight:700; box-shadow:0 2px 8px rgba(201,166,107,0.4); letter-spacing:0.5px;">-{{ product.discount_percentage }}%</span>
+      </div>
+      {% endif %}
+    </a>
+
+    <div style="padding:16px; display:flex; flex-direction:column; gap:12px; flex:1; {% if not product.in_stock %}opacity:0.7;{% endif %}">
+      <div>
+        <h4 style="font-size:1rem; font-weight:600; margin:0 0 6px; line-height:1.3;">
+          <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none text-dark" style="color:inherit;">
+            {{ product.name }}
+          </a>
+        </h4>
+
+        <div class="muted small">
+          {% if product.category %}
+            {{ product.category.name }}
+          {% else %}
+            Sans catégorie
+          {% endif %}
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
+        <div style="font-size:1.25rem; font-weight:800; color:#a86b2e;">{{ product.price }} <small class="muted" style="font-size:0.75rem; font-weight:400;">DH</small></div>
+        
+        {% if product.in_stock %}
+        <form action="{% url 'products:cart_add' %}" method="post" style="margin:0;">
+          {% csrf_token %}
+          <input type="hidden" name="slug" value="{{ product.slug }}">
+          <input type="hidden" name="quantity" value="1">
+          <button class="btn btn-primary-ebb btn-sm" type="submit" style="white-space:nowrap;">Ajouter</button>
+        </form>
+        {% else %}
+        <button class="btn btn-sm" disabled style="background:#e5e7eb; color:#6b7280; border:none; white-space:nowrap; cursor:not-allowed; padding:6px 16px; border-radius:8px; font-weight:600;">Indisponible</button>
+        {% endif %}
+      </div>
+
+      {% if product.in_stock and product.id %}
+        <a href="{% url 'products:product_sizes' product.id %}" class="btn btn-outline-secondary btn-sm" style="text-align:center;">Voir tailles</a>
+      {% endif %}
+    </div>
+
+  </div>
+{% endfor %}

@@ -1,0 +1,46 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Tailles — {{ product.name }}{% endblock %}
+
+{% block hero %}
+<div class="site-hero container mb-3">
+  <div class="hero-box">
+    <div class="row align-items-center">
+      <div class="col-md-9">
+        <h2 class="hero-title">Tailles pour « {{ product.name }} »</h2>
+        <p class="hero-sub muted">Sélectionnez la taille qui correspond à vos besoins — chaque taille possède son prix.</p>
+      </div>
+      <div class="col-md-3 text-md-end">
+        <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-outline-secondary">Retour au produit</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+  <div class="card-ep p-4">
+    {% if sizes %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Tailles</th>
+            <th>Prix</th>
+            <th>Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in sizes %}
+            <tr>
+              <td>{{ s.label }}</td>
+              <td>{{ s.price }} <small class="muted">{{ product.currency }}</small></td>
+              <td>{% if s.stock is not None %}{{ s.stock }}{% else %}—{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="muted small">Aucune taille enregistrée pour ce produit.</div>
+    {% endif %}
+  </div>
+{% endblock %}

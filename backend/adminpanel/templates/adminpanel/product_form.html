@@ -1,0 +1,51 @@
+{% extends 'admin/base_site.html' %}
+
+{% block title %}{% if is_add %}Ajouter{% else %}Modifier{% endif %} Produit{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card p-3 shadow-sm border-0">
+        <h4>{% if is_add %}Ajouter{% else %}Modifier{% endif %} Produit</h4>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          {% for field in form.visible_fields %}
+            <div class="mb-3">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+              {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% endfor %}
+
+          <div class="mb-3">
+            <label for="id_images" class="form-label">Images supplémentaires</label>
+            <input id="id_images" type="file" name="images" multiple class="form-control">
+          </div>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary">Enregistrer</button>
+            <a href="{% url 'adminpanel:products_list' %}" class="btn btn-link">Annuler</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      {% if not is_add and product %}
+        <div class="card p-3 shadow-sm border-0">
+          <h6>Images</h6>
+          <div class="d-grid gap-2">
+            {% for img in images %}
+              <div class="ratio ratio-1x1" style="background-image:url({{ img.image.url }}); background-size:cover; background-position:center; border-radius:8px"></div>
+            {% empty %}
+              <div class="text-muted">Aucune image</div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}

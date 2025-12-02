@@ -1,0 +1,617 @@
+{% extends 'products/base.html' %}
+{% block title %}Panier — Emboitage{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Checkout Sections */
+.checkout-section {
+    transition: all 0.3s ease;
+}
+
+.checkout-section.hidden {
+    display: none;
+}
+
+/* Progress Steps */
+.progress-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: #F5F1E8;
+    color: #8B7355;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.step.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(201, 166, 107, 0.3);
+}
+
+.step-number {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.step.active .step-number {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-dark);
+}
+
+/* Checkout Form */
+.checkout-form-container {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-group-modern {
+    margin-bottom: 24px;
+}
+
+.form-group-modern label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 14px;
+}
+
+.form-group-modern label .required {
+    color: #C17767;
+    margin-left: 4px;
+}
+
+.form-input-modern {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #E5DCC9;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.2s;
+    background: #FAFAF8;
+}
+
+.form-input-modern:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(201, 166, 107, 0.1);
+}
+
+.form-input-modern::placeholder {
+    color: #A0A0A0;
+}
+
+textarea.form-input-modern {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Order Summary */
+.order-summary {
+    background: #F5F1E8;
+    border-radius: 16px;
+    padding: 28px;
+}
+
+.order-summary h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #E5DCC9;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item-details {
+    flex: 1;
+}
+
+.order-item-name {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.order-item-meta {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.order-item-price {
+    font-weight: 700;
+    color: var(--primary-dark);
+    white-space: nowrap;
+    margin-left: 16px;
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 2px solid var(--primary);
+    font-size: 20px;
+    font-weight: 800;
+}
+
+/* Buttons */
+.btn-checkout-action {
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-back {
+    background: white;
+    border: 2px solid #E5DCC9;
+    color: var(--text);
+}
+
+.btn-back:hover {
+    background: #F5F1E8;
+    transform: translateY(-2px);
+}
+
+.btn-whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+}
+
+.btn-whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
+}
+
+.btn-whatsapp:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .checkout-form-container,
+    .order-summary {
+        padding: 20px;
+    }
+    
+    .btn-checkout-action {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .progress-steps {
+        gap: 8px;
+    }
+    
+    .step {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="container mb-5">
+    
+    {% if cart_items %}
+    
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+        <div class="step active" id="step1">
+            <span class="step-number">1</span>
+            <span>Panier</span>
+        </div>
+        <div style="color: #E5DCC9;">→</div>
+        <div class="step" id="step2">
+            <span class="step-number">2</span>
+            <span>Informations</span>
+        </div>
+        <div style="color: #E5DCC9;">→</div>
+        <div class="step" id="step3">
+            <span class="step-number">3</span>
+            <span>Confirmation</span>
+        </div>
+    </div>
+
+    <!-- SECTION 1: CART VIEW -->
+    <div id="cartSection" class="checkout-section">
+        <h1 class="h4 mb-4">Votre panier</h1>
+        
+        <div class="table-responsive cart-table">
+            <table class="table align-middle bg-white shadow-sm rounded">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Produit</th>
+                        <th scope="col" style="width:120px;">Prix</th>
+                        <th scope="col" style="width:140px;">Quantité</th>
+                        <th scope="col" style="width:140px;">Sous-total</th>
+                        <th scope="col" style="width:80px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="cartItemsTable">
+                    {% for item in cart_items %}
+                    <tr data-product-id="{{ item.product.id }}" 
+                        data-product-name="{{ item.product.name }}"
+                        data-product-slug="{{ item.product.slug }}"
+                        data-product-price="{{ item.price }}"
+                        data-product-quantity="{{ item.quantity }}"
+                        data-product-subtotal="{{ item.subtotal }}">
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                {% if item.product.image %}
+                                  <img src="{{ item.product.image.url }}" class="table-img rounded border" alt="{{ item.product.name }}" style="width: 80px; height: 60px; object-fit: cover;">
+                                {% else %}
+                                  <div class="table-img rounded border" style="background:linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:0.65rem; padding:4px; width:80px; height:60px;">Image</div>
+                                {% endif %}
+                                <div>
+                                    <a href="{% url 'products:product_detail' item.product.slug %}" class="text-decoration-none text-dark fw-semibold">{{ item.product.name|default:"" }}</a>
+                                    <div class="small text-muted">
+                                        Catégorie: {% if item.product.category %}{{ item.product.category.name|default:"" }}{% else %}—{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="item-price">{{ item.price|default:"0" }} DH</td>
+                        <td>
+                            <form action="{% url 'products:cart_update' %}" method="post" class="d-flex gap-2 align-items-center">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                                <input type="number" name="quantity" value="{{ item.quantity|default:"1" }}" min="0" class="form-control form-control-sm item-quantity" style="width:84px;">
+                                <button class="btn btn-sm btn-outline-secondary" type="submit">Mettre à jour</button>
+                            </form>
+                        </td>
+                        <td class="item-subtotal">{{ item.subtotal|default:"0" }} DH</td>
+                        <td>
+                            <form action="{% url 'products:cart_remove' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                                <button class="btn btn-sm btn-danger">✕</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-3">
+            <div>
+                <form action="{% url 'products:cart_clear' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger btn-sm">Vider le panier</button>
+                </form>
+            </div>
+            <div class="text-end">
+                <div class="small text-muted">Total</div>
+                <div class="h4" id="cart-total-display">{{ cart_total|default:"0" }} DH</div>
+                <button class="btn btn-primary-ebb mt-2" onclick="goToCheckout()">Passer la commande</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: CHECKOUT FORM -->
+    <div id="checkoutSection" class="checkout-section hidden">
+        <h1 class="h4 mb-4">Informations de livraison</h1>
+        
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="checkout-form-container">
+                    <form id="checkoutForm">
+                        <div class="form-group-modern">
+                            <label for="customerName">Nom complet <span class="required">*</span></label>
+                            <input type="text" id="customerName" class="form-input-modern" required placeholder="Votre nom complet">
+                        </div>
+                        
+                        <div class="form-group-modern">
+                            <label for="customerPhone">Numéro de téléphone <span class="required">*</span></label>
+                            <input type="tel" id="customerPhone" class="form-input-modern" required placeholder="06 XX XX XX XX">
+                        </div>
+                        
+                        <div class="form-group-modern">
+                            <label for="customerCity">Ville <span class="required">*</span></label>
+                            <select id="customerCity" class="form-input-modern" required>
+                                <option value="">Sélectionnez votre ville</option>
+                                <option value="Casablanca">Casablanca</option>
+                                <option value="Rabat">Rabat</option>
+                                <option value="Marrakech">Marrakech</option>
+                                <option value="Fès">Fès</option>
+                                <option value="Tanger">Tanger</option>
+                                <option value="Agadir">Agadir</option>
+                                <option value="Meknès">Meknès</option>
+                                <option value="Oujda">Oujda</option>
+                                <option value="Kénitra">Kénitra</option>
+                                <option value="Tétouan">Tétouan</option>
+                                <option value="Safi">Safi</option>
+                                <option value="Mohammedia">Mohammedia</option>
+                                <option value="El Jadida">El Jadida</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group-modern">
+                            <label for="customerAddress">Adresse complète <span class="required">*</span></label>
+                            <input type="text" id="customerAddress" class="form-input-modern" required placeholder="Rue, quartier, numéro...">
+                        </div>
+                        
+                        <div class="form-group-modern">
+                            <label for="customerNotes">Notes supplémentaires (optionnel)</label>
+                            <textarea id="customerNotes" class="form-input-modern" placeholder="Instructions de livraison, demandes spéciales..."></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-lg-5">
+                <div class="order-summary">
+                    <h3>📦 Récapitulatif de commande</h3>
+                    <div id="orderSummaryItems"></div>
+                    <div class="order-total">
+                        <span>Total</span>
+                        <span id="orderTotalDisplay">0 DH</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex gap-3 mt-4 flex-wrap">
+            <button class="btn-checkout-action btn-back" onclick="backToCart()">
+                ← Retour au panier
+            </button>
+            <button class="btn-checkout-action btn-whatsapp" id="btnSubmitOrder" onclick="submitOrder()">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                Commander via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="card-ep muted p-4">Votre panier est vide.</div>
+    <a class="btn btn-outline-primary mt-3" href="{% url 'products:product_list' %}">Retour aux produits</a>
+    {% endif %}
+
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Get cart data
+function getCartItems() {
+    const items = [];
+    const rows = document.querySelectorAll('#cartItemsTable tr');
+    
+    rows.forEach(row => {
+        const name = row.dataset.productName;
+        const slug = row.dataset.productSlug;
+        const price = row.dataset.productPrice;
+        const quantity = row.dataset.productQuantity;
+        const subtotal = row.dataset.productSubtotal;
+        
+        if (name) {
+            items.push({ name, slug, price, quantity, subtotal });
+        }
+    });
+    
+    return items;
+}
+
+// Step 1 -> Step 2: Go to checkout form
+function goToCheckout() {
+    // Hide cart, show form
+    document.getElementById('cartSection').classList.add('hidden');
+    document.getElementById('checkoutSection').classList.remove('hidden');
+    
+    // Update progress
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    
+    // Build order summary
+    buildOrderSummary();
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Step 2 -> Step 1: Back to cart
+function backToCart() {
+    document.getElementById('checkoutSection').classList.add('hidden');
+    document.getElementById('cartSection').classList.remove('hidden');
+    
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step1').classList.add('active');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Build order summary in checkout
+function buildOrderSummary() {
+    const items = getCartItems();
+    const container = document.getElementById('orderSummaryItems');
+    const total = document.getElementById('cart-total-display').textContent.trim();
+    
+    container.innerHTML = '';
+    
+    items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'order-item';
+        div.innerHTML = `
+            <div class="order-item-details">
+                <div class="order-item-name">${item.name}</div>
+                <div class="order-item-meta">Quantité: ${item.quantity} × ${item.price} DH</div>
+            </div>
+            <div class="order-item-price">${item.subtotal} DH</div>
+        `;
+        container.appendChild(div);
+    });
+    
+    document.getElementById('orderTotalDisplay').textContent = total;
+}
+
+// Submit order and redirect to WhatsApp
+function submitOrder() {
+    const form = document.getElementById('checkoutForm');
+    
+    // Validate
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    // Get form data
+    const customerName = document.getElementById('customerName').value;
+    const customerPhone = document.getElementById('customerPhone').value;
+    const customerCity = document.getElementById('customerCity').value;
+    const customerAddress = document.getElementById('customerAddress').value;
+    const customerNotes = document.getElementById('customerNotes').value;
+    
+    // Get cart data
+    const items = getCartItems();
+    const totalText = document.getElementById('cart-total-display').textContent.trim();
+    const totalPrice = parseFloat(totalText.replace(/[^\d.]/g, ''));
+    
+    // Disable button
+    const btn = document.getElementById('btnSubmitOrder');
+    btn.disabled = true;
+    btn.innerHTML = '<span>Enregistrement...</span>';
+    
+    // Prepare order data for backend
+    const orderData = {
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        customer_email: '',
+        customer_city: customerCity,
+        customer_address: customerAddress,
+        customer_notes: customerNotes,
+        total_price: totalPrice,
+        items: items.map(item => ({
+            slug: item.slug,
+            quantity: item.quantity,
+            price: parseFloat(item.price)
+        }))
+    };
+    
+    // Save order to database
+    fetch('/orders/create/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Build WhatsApp message
+            let message = `🛍️ *NOUVELLE COMMANDE EMBOITAGE*\n\n`;
+            message += `━━━━━━━━━━━━━━━━━━━━\n`;
+            message += `📋 *INFORMATIONS CLIENT*\n\n`;
+            message += `👤 *Nom:* ${customerName}\n`;
+            message += `📞 *Téléphone:* ${customerPhone}\n`;
+            message += `🏙️ *Ville:* ${customerCity}\n`;
+            message += `📍 *Adresse:* ${customerAddress}\n`;
+            
+            if (customerNotes) {
+                message += `📝 *Notes:* ${customerNotes}\n`;
+            }
+            
+            message += `\n━━━━━━━━━━━━━━━━━━━━\n`;
+            message += `📦 *PRODUITS COMMANDÉS*\n\n`;
+            
+            items.forEach((item, index) => {
+                message += `${index + 1}. *${item.name}*\n`;
+                message += `   • Quantité: ${item.quantity}\n`;
+                message += `   • Prix unitaire: ${item.price} DH\n`;
+                message += `   • Sous-total: ${item.subtotal} DH\n\n`;
+            });
+            
+            message += `━━━━━━━━━━━━━━━━━━━━\n`;
+            message += `💰 *MONTANT TOTAL: ${totalText}*\n`;
+            message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
+            message += `📋 *Commande N°${data.order_id}*\n`;
+            message += `✅ Merci de confirmer cette commande.\n`;
+            message += `📦 Emboitage - Solutions professionnelles`;
+            
+            // Encode for URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // WhatsApp URL
+            const whatsappNumber = '212658283277';
+            const whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
+            
+            // Update button
+            btn.innerHTML = '<span>Redirection vers WhatsApp...</span>';
+            
+            // Update progress
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step3').classList.add('active');
+            
+            // Redirect
+            setTimeout(() => {
+                window.open(whatsappURL, '_blank');
+                
+                // Show success message
+                setTimeout(() => {
+                    alert('✅ Votre commande a été enregistrée ! Nous vous répondrons rapidement sur WhatsApp.');
+                    window.location.reload();
+                }, 1000);
+            }, 500);
+        } else {
+            alert('❌ Erreur lors de l\'enregistrement de la commande. Veuillez réessayer.');
+            btn.disabled = false;
+            btn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg><span>Commander via WhatsApp</span>';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('❌ Erreur de connexion. Veuillez vérifier votre connexion internet.');
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg><span>Commander via WhatsApp</span>';
+    });
+}
+</script>
+{% endblock %}

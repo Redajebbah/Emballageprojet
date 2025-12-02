@@ -1,0 +1,357 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% block title %}Accueil — Les meilleures solutions d'emboitage au Maroc{% endblock %}
+
+{% block hero %}
+<!-- HERO SLIDER -->
+<section class="hero-slider">
+  <div class="hero-slide active" style="background: linear-gradient(135deg, #C9A66B 0%, #8B6F47 100%);">
+    <div class="container">
+      <div class="row align-items-center py-5">
+        <div class="col-lg-6">
+          <div class="hero-content">
+            <span class="hero-badge">Livraison à partir de 50 Unités</span>
+            <h1 class="hero-title">Découvrez nos produits d'emboitage et carton au Maroc</h1>
+            <p class="hero-text">L'emboitage de qualité pour envoyer vos produits en toutes sécurité — les meilleures solutions</p>
+            <a href="/products/" class="btn btn-hero">Découvrir tous nos produits</a>
+          </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block text-center">
+          <div class="hero-img-professional" style="width: 100%; height: 450px; background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(245,241,232,0.95) 100%); border-radius: 20px; box-shadow: 0 20px 60px rgba(139,111,71,0.15); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 2px solid rgba(201,166,107,0.2);">
+            <!-- Subtle pattern overlay -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at 20% 50%, rgba(201,166,107,0.03) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(139,111,71,0.03) 0%, transparent 50%);"></div>
+            
+            <!-- Decorative circles -->
+            <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(201,166,107,0.08), transparent); opacity: 0.6;"></div>
+            <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, rgba(139,111,71,0.06), transparent); opacity: 0.5;"></div>
+            
+            <!-- Content -->
+            <div style="position: relative; z-index: 2; text-align: center; padding: 50px 40px;">
+              <!-- Professional packaging illustration -->
+              <div style="margin-bottom: 35px;">
+                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Stack of boxes -->
+                  <g style="filter: drop-shadow(0 8px 20px rgba(74,63,53,0.15));">
+                    <!-- Back box -->
+                    <rect x="110" y="50" width="70" height="80" rx="4" fill="#D4B896" opacity="0.7"/>
+                    <rect x="115" y="55" width="60" height="12" rx="2" fill="#8B6F47" opacity="0.5"/>
+                    <path d="M145 50 V 30 M140 50 V 35 M150 50 V 35" stroke="#8B7355" stroke-width="2" opacity="0.4"/>
+                    
+                    <!-- Middle box -->
+                    <rect x="55" y="70" width="85" height="95" rx="5" fill="#C9A66B"/>
+                    <rect x="62" y="80" width="71" height="15" rx="3" fill="#8B6F47" opacity="0.6"/>
+                    <line x1="97" y1="70" x2="97" y2="165" stroke="#8B7355" stroke-width="2" opacity="0.3"/>
+                    <line x1="55" y1="117" x2="140" y2="117" stroke="#8B7355" stroke-width="2" opacity="0.3"/>
+                    
+                    <!-- Front box -->
+                    <rect x="20" y="95" width="90" height="100" rx="5" fill="#E5DCC9"/>
+                    <rect x="28" y="105" width="74" height="18" rx="3" fill="#C9A66B"/>
+                    <path d="M65 95 L65 50 M60 95 L60 60 M70 95 L70 60" stroke="#D4B896" stroke-width="3" stroke-linecap="round"/>
+                    
+                    <!-- Tape on front box -->
+                    <rect x="28" y="140" width="74" height="8" rx="2" fill="#8B6F47" opacity="0.4"/>
+                    
+                    <!-- Labels -->
+                    <rect x="35" y="165" width="30" height="20" rx="2" fill="white" opacity="0.9"/>
+                    <rect x="70" y="165" width="30" height="20" rx="2" fill="white" opacity="0.9"/>
+                  </g>
+                </svg>
+              </div>
+              
+              <!-- Brand & tagline -->
+              <div style="font-size: 32px; font-weight: 800; letter-spacing: 2px; margin-bottom: 12px; color: #4A3F35; line-height: 1.2;">EMBOITAGE</div>
+              <div style="font-size: 14px; color: #8B7355; margin-bottom: 30px; font-weight: 500;">Solutions d'emboitage professionnelles</div>
+              <div style="width: 60px; height: 3px; background: linear-gradient(90deg, #C9A66B, #8B6F47); margin: 0 auto 25px;"></div>
+              
+              <!-- Features -->
+              <div style="font-size: 13px; color: #8B7355; font-weight: 500; font-style: italic;">Qualité • Fiabilité • Innovation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE BOXES -->
+<section class="feature-boxes">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
+            </svg>
+          </div>
+          <div class="feature-title">Support</div>
+          <div class="feature-sub">24h/24 et 7j/7</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
+            </svg>
+          </div>
+          <div class="feature-title">Le plus grand choix</div>
+          <div class="feature-sub">Pour les professionnels</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-2zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+            </svg>
+          </div>
+          <div class="feature-title">Paiement</div>
+          <div class="feature-sub">À la livraison</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+            </svg>
+          </div>
+          <div class="feature-title">Livraison gratuite</div>
+          <div class="feature-sub">à partir de 10.000 MAD</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLOREZ NOS GAMMES -->
+<section class="categories-showcase">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">Explorez nos gammes d'emboitage</h2>
+      <p class="section-subtitle">Sachets, cartons et emboitage pour e-commerce – Solutions d'expédition sécurisées</p>
+      <a href="/products/" class="btn btn-primary-ebb">Découvrir tous nos produits</a>
+    </div>
+    
+    <div class="row g-4 mt-2">
+      {% for category in categories %}
+      <div class="col-6 col-md-3">
+        <a href="/products/?category={{ category.slug }}" class="category-showcase-card">
+          {% if category.image %}
+            <div class="category-img" style="background-image: url('{{ category.image.url }}'); background-size: cover; background-position: center;"></div>
+          {% else %}
+            <div class="category-img" style="background: linear-gradient(135deg, #D4B896 0%, #C9A66B 100%);"></div>
+          {% endif %}
+          <div class="category-name">{{ category.name }}</div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+  <!-- DERNIERS PRODUITS -->
+  <section class="products-section">
+    <div class="container">
+      <div class="section-header-inline">
+        <h3 class="section-title-small">Derniers produits</h3>
+        <a href="/products/" class="view-all-link">Voir tout →</a>
+      </div>
+
+      <div class="product-grid-modern">
+        {% for product in products|slice:":8" %}
+        <div class="product-card-modern {% if not product.in_stock %}out-of-stock-card{% endif %}">
+          <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none" style="position:relative; display:block;">
+            {% if product.image %}
+              <div class="product-img-modern" style="background-image: url('{{ product.image.url }}'); {% if not product.in_stock %}filter: grayscale(30%) opacity(0.7);{% endif %}"></div>
+            {% else %}
+              <div class="product-img-modern" style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); {% if not product.in_stock %}filter: opacity(0.7);{% endif %}"></div>
+            {% endif %}
+
+            {# Out of stock overlay #}
+            {% if not product.in_stock %}
+            <div style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(201,166,107,0.92), rgba(139,111,71,0.88)); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(2px); border-radius:12px;">
+              <div style="text-align:center; color:white; padding:20px;">
+                <svg width="40" height="40" fill="currentColor" viewBox="0 0 16 16" style="margin-bottom:8px; opacity:0.9;">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                </svg>
+                <div style="font-size:15px; font-weight:800; letter-spacing:0.5px; text-shadow:0 2px 4px rgba(0,0,0,0.2);">RUPTURE DE STOCK</div>
+                <div style="font-size:10px; opacity:0.95; font-weight:500; margin-top:2px;">Temporairement indisponible</div>
+              </div>
+            </div>
+            {% endif %}
+            
+            <div class="product-info-modern" style="{% if not product.in_stock %}opacity:0.7;{% endif %}">
+              <div class="product-name-modern">{{ product.name|truncatechars:40 }}</div>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="product-price-modern">{{ product.price }} <small>MAD</small></div>
+                {% if product.discount %}
+                <span class="discount-badge">-{{ product.discount }}%</span>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+          
+          {% if product.in_stock %}
+          <form action="{% url 'products:cart_add' %}" method="post" class="add-cart-form">
+            {% csrf_token %}
+            <input type="hidden" name="slug" value="{{ product.slug }}">
+            <input type="hidden" name="quantity" value="1">
+            <button class="btn-add-cart" type="submit">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg>
+            </button>
+          </form>
+          {% else %}
+          <button class="btn-add-cart" disabled style="opacity:0.4; cursor:not-allowed; background:#6b7280;">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+            </svg>
+          </button>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- BIENVENUE SECTION -->
+  <section class="welcome-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2 class="welcome-title">Bienvenue sur Emboitage, votre boutique en ligne N°1 au Maroc !</h2>
+          <p class="welcome-text">Elle vous offre les meilleurs Emboitage et Cartons pour l'E-Commerce afin d'envoyer vos produits d'une manière sûre et sécurisée avec une qualité garantie. Vous avez la possibilité d'acheter à partir de 50 Unités et une livraison partout au Maroc sous 48h.</p>
+          
+          <div class="welcome-features">
+            <div class="wf-item">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+              </svg>
+              <span>Des boîtes prêtes à l'emploi à portée de clic</span>
+            </div>
+            <div class="wf-item">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+              </svg>
+              <span>Commande petite ou grande quantité</span>
+            </div>
+            <div class="wf-item">
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+              </svg>
+              <span>Solutions d'emboitage professionnelles</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block">
+          <div class="welcome-img-professional" style="width: 100%; height: 450px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(139,111,71,0.12); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 1px solid rgba(229,220,201,0.5);">
+            <!-- Background decorative elements -->
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 200px; background: linear-gradient(180deg, rgba(245,241,232,0.4) 0%, transparent 100%);"></div>
+            <div style="position: absolute; bottom: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle, rgba(201,166,107,0.06), transparent); opacity: 0.7;"></div>
+            
+            <!-- Content -->
+            <div style="position: relative; z-index: 2; text-align: center; padding: 50px;">
+              <!-- Modern 3D boxes illustration -->
+              <div style="margin-bottom: 35px;">
+                <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g style="filter: drop-shadow(0 6px 16px rgba(74,63,53,0.12));">
+                    <!-- Large box -->
+                    <g>
+                      <path d="M80 45 L115 60 L115 110 L80 125 L45 110 L45 60 Z" fill="#E5DCC9"/>
+                      <path d="M80 45 L115 60 L80 75 L45 60 Z" fill="#C9A66B"/>
+                      <path d="M80 75 L80 125 L45 110 L45 60 Z" fill="#D4B896"/>
+                      <path d="M80 75 L80 125 L115 110 L115 60 Z" fill="#C9A66B" opacity="0.8"/>
+                    </g>
+                    
+                    <!-- Small box on top -->
+                    <g>
+                      <path d="M80 20 L100 28 L100 48 L80 56 L60 48 L60 28 Z" fill="#8B6F47" opacity="0.9"/>
+                      <path d="M80 20 L100 28 L80 36 L60 28 Z" fill="#C9A66B"/>
+                      <path d="M80 36 L80 56 L60 48 L60 28 Z" fill="#A68A64"/>
+                    </g>
+                    
+                    <!-- Shipping label -->
+                    <rect x="65" y="85" width="30" height="20" rx="2" fill="white" opacity="0.95"/>
+                    <line x1="70" y1="92" x2="90" y2="92" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+                    <line x1="70" y1="98" x2="85" y2="98" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+                  </g>
+                </svg>
+              </div>
+              
+              <!-- Brand text -->
+              <div style="font-size: 38px; font-weight: 800; letter-spacing: 3px; margin-bottom: 15px; color: #4A3F35;\">EMBOITAGE</div>
+              <div style="font-size: 15px; font-weight: 600; color: #8B7355; letter-spacing: 0.5px; margin-bottom: 30px;\">Solutions professionnelles d'emballage</div>
+              
+              <!-- Contact buttons -->
+              <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;\">
+                <a href="tel:0658283277" style="background: linear-gradient(135deg, #C9A66B, #8B6F47); color: white; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(201,166,107,0.3); transition: all 0.3s;\">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16\">
+                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                  </svg>
+                  <span>06 58 28 32 77</span>
+                </a>
+                <a href="tel:0645557122" style="background: white; color: #4A3F35; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(139,111,71,0.15); border: 2px solid rgba(201,166,107,0.3); transition: all 0.3s;\">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16\">
+                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                  </svg>
+                  <span>06 45 55 71 22</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block fullwidth %}
+  <!-- Contact / CTA section -->
+  <section id="contact" class="cta-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+          <h3 class="cta-title">Besoin d'un emboitage sur-mesure ?</h3>
+          <p class="cta-text">Contactez notre équipe pour un devis personnalisé. Nous proposons des solutions pour petites et grandes séries.</p>
+          <a href="tel:0658283277" class="btn btn-cta">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/>
+            </svg>
+            Demander un devis
+          </a>
+        </div>
+        <div class="col-lg-6">
+          <div class="contact-form-box">
+            <form action="#" method="post" class="contact-form">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <input type="text" class="form-control-modern" placeholder="Nom / Société" required>
+                </div>
+                <div class="col-md-6">
+                  <input type="email" class="form-control-modern" placeholder="Email" required>
+                </div>
+                <div class="col-12">
+                  <input type="text" class="form-control-modern" placeholder="Sujet" required>
+                </div>
+                <div class="col-12">
+                  <textarea class="form-control-modern" rows="3" placeholder="Message"></textarea>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-submit-form">Envoyer</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

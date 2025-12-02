@@ -1,0 +1,80 @@
+{% extends 'admin/base_site.html' %}
+
+{% block title %}Admin — Tableau de bord{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Tableau de bord</h2>
+    <div>
+      <a href="{% url 'adminpanel:products_add' %}" class="btn btn-success">Ajouter un produit</a>
+      <a href="{% url 'adminpanel:products_list' %}" class="btn btn-outline-secondary ms-2">Gérer les produits</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 mb-3">
+      <div class="card p-3 text-center shadow-sm border-0">
+        <div class="muted small">Produits</div>
+        <div class="h3">{{ total_products }}</div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3 text-center shadow-sm border-0">
+        <div class="muted small">Catégories</div>
+        <div class="h3">{{ total_categories }}</div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3 text-center shadow-sm border-0">
+        <div class="muted small">Stock total</div>
+        <div class="h3">{{ total_stock }}</div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3 text-center shadow-sm border-0">
+        <div class="muted small">Ruptures</div>
+        <div class="h3">{{ out_of_stock }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-8">
+      <h5>Produits faibles en stock</h5>
+      <ul class="list-group mt-2">
+        {% for p in top_low_stock %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ p.name }}</strong>
+              <div class="small text-muted">
+                {% if p.category %}
+                  {{ p.category.name }}
+                {% else %}
+                  -
+                {% endif %}
+              </div>
+            </div>
+            <div class="badge bg-warning text-dark">{{ p.stock_quantity }}</div>
+          </li>
+        {% empty %}
+          <li class="list-group-item">Aucun produit en faible stock</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="col-md-4">
+      <h5>Catégories</h5>
+      <ul class="list-group mt-2">
+        {% for c in categories_data %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ c.name }}
+            <span class="badge bg-secondary">{{ c.count }}</span>
+          </li>
+        {% empty %}
+          <li class="list-group-item">Aucune catégorie</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}

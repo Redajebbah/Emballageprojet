@@ -1,0 +1,141 @@
+{% extends 'products/base.html' %}
+
+{% block title %}{{ product.name }} — Emboitage{% endblock %}
+
+{% block content %}
+<main class="container mb-5">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <a href="{% if product.category %}/products/?category={{ product.category.slug }}{% else %}/products/{% endif %}" class="btn btn-link">← Retour à la catégorie</a>
+        </div>
+
+        <div class="col-12 col-lg-6 detail-image">
+            {% if product.image %}
+                <img id="main-product-image" src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded product-image border bg-white">
+            {% else %}
+                <div id="main-product-image" class="img-fluid rounded product-image border" style="background:linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); display:flex; align-items:center; justify-content:center; color:#94a3b8; min-height:400px;">Pas d'image disponible</div>
+            {% endif %}
+
+            {# thumbnails if available #}
+            <div class="d-flex gap-2 mt-3">
+                {% if product.image %}<img src="{{ product.image.url }}" data-src="{{ product.image.url }}" class="img-thumbnail" style="width:72px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid rgba(226,232,240,0.9)" alt="Thumb">{% endif %}
+                {% if product.image2 %}<img src="{{ product.image2.url }}" data-src="{{ product.image2.url }}" class="img-thumbnail" style="width:72px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid rgba(226,232,240,0.9)" alt="Thumb">{% endif %}
+                {% if product.image3 %}<img src="{{ product.image3.url }}" data-src="{{ product.image3.url }}" class="img-thumbnail" style="width:72px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid rgba(226,232,240,0.9)" alt="Thumb">{% endif %}
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <h1 class="display-6 fw-bold">{{ product.name }}</h1>
+            <p class="h4 text-primary">{{ product.price }} DH</p>
+
+            {% if product.description %}
+                <div class="mb-3"><p class="text-muted">{{ product.description }}</p></div>
+            {% endif %}
+
+            {# Tabbed extra info #}
+            <ul class="nav nav-tabs mt-3" id="prodTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab">Description</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab">Détails</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">Livraison</button>
+                </li>
+            </ul>
+
+            <div class="tab-content border p-3 mt-2 rounded" id="prodTabContent">
+                <div class="tab-pane fade show active" id="desc" role="tabpanel">{{ product.description }}</div>
+                <div class="tab-pane fade" id="details" role="tabpanel">
+                    <div class="small text-muted">Taille: {{ product.size|default:"N/A" }} • Stock: {{ product.stock_quantity }} • SKU: {{ product.id }}</div>
+                </div>
+                <div class="tab-pane fade" id="shipping" role="tabpanel">
+                    <div class="small text-muted">Livraison standard en 2-5 jours ouvrés. Options express disponibles.</div>
+                </div>
+            </div>
+
+            {% if sizes %}
+            <div class="mb-3">
+                <label for="sizeSelect" class="form-label small">Taille</label>
+                <select id="sizeSelect" class="form-select" aria-label="Choisir la taille">
+                    {% for s in sizes %}
+                        {% if s.label %}
+                            <option value="{{ s.id }}">{{ s.label }} — {{ s.price }} {{ product.currency }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+
+            <p class="mb-3">Stock: {% if product.in_stock %}<span class="text-success">En stock ({{ product.stock_quantity }})</span>{% else %}<span class="text-danger">Rupture</span>{% endif %}</p>
+
+            <div class="d-flex gap-2 mb-4">
+                <form action="{% url 'products:cart_add' %}" method="post" class="d-flex gap-2 align-items-center js-add-to-cart">
+                    {% csrf_token %}
+                    <input type="hidden" name="slug" value="{{ product.slug }}">
+                    <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm" style="width:110px;">
+                    <button class="btn btn-primary-ebb" type="submit">Ajouter au panier</button>
+                </form>
+
+                <a class="btn btn-outline-secondary" href="/products/">Retour aux produits</a>
+            </div>
+
+            <div class="small text-muted">
+                Catégorie : {% if product.category %}<a href="/products/?category={{ product.category.slug }}">{{ product.category.name }}</a>{% else %}—{% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if similar_products %}
+    <hr class="my-5">
+    <h5>Produits similaires</h5>
+    <div class="row g-4 mt-2">
+        {% for p in similar_products %}
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card h-100 shadow-sm">
+                <a href="{% url 'products:product_detail' p.slug %}" class="text-decoration-none text-reset">
+                    {% if p.image %}
+                      <img src="{{ p.image.url }}" class="card-img-top" style="height:160px; object-fit:cover;" alt="{{ p.name }}">
+                    {% else %}
+                      <div class="card-img-top" style="height:160px; background:linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:0.8rem; padding:12px; text-align:center;">{{ p.name }}</div>
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h6 class="card-title"><a href="{% url 'products:product_detail' p.slug %}" class="text-decoration-none">{{ p.name }}</a></h6>
+                    <div class="text-muted">{{ p.price }} DH</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {# sticky mobile add to cart CTA #}
+        <div id="eb-sticky-cta" class="d-lg-none" style="position:fixed;left:0;right:0;bottom:12px;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(90deg, rgba(168,107,46,0.05), rgba(42,77,58,0.02));box-shadow:var(--shadow-soft);border-radius:14px;margin:12px;z-index:120;">
+        <div style="display:flex;gap:12px;align-items:center">
+            <div style="width:52px; height:44px; background:linear-gradient(135deg,#fff,#f8fafc); border-radius:8px; display:flex;align-items:center;justify-content:center; box-shadow:var(--shadow-subtle)">
+                {% if product.image %}
+                  <img src="{{ product.image.url }}" style="width:40px;height:34px;object-fit:cover;border-radius:6px; border:1px solid rgba(0,0,0,0.04)">
+                {% else %}
+                  <div style="width:40px;height:34px;background:linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);border-radius:6px;"></div>
+                {% endif %}
+            </div>
+            <div>
+                <div style="font-weight:700">{{ product.name }}</div>
+                <div class="small muted">{{ product.price }} DH</div>
+            </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+                <form action="{% url 'products:cart_add' %}" method="post" class="d-flex gap-2 align-items-center js-add-to-cart">
+                {% csrf_token %}
+                <input type="hidden" name="slug" value="{{ product.slug }}">
+                <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm" style="width:72px;">
+                <button class="btn btn-primary-ebb" type="submit">Ajouter</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}
