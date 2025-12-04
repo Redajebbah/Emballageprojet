@@ -173,6 +173,8 @@ body {
 .nav-icons {
   display: flex;
   gap: 18px;
+  position: relative;
+  z-index: 50;
 }
 
 .nav-icon-link {
@@ -210,6 +212,8 @@ body {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  position: relative;
+  z-index: 100;
 }
 
 .main-nav::-webkit-scrollbar {
@@ -778,6 +782,12 @@ body {
   
   .main-nav {
     gap: 4px;
+    background: white;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 8px;
   }
   
   .main-nav-link {
@@ -787,6 +797,73 @@ body {
   
   .main-nav-link span {
     display: none;
+  }
+  
+  /* Cart table mobile responsiveness */
+  .cart-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .cart-table table {
+    min-width: 650px;
+  }
+  
+  .cart-table thead th:first-child {
+    min-width: 200px;
+  }
+  
+  .cart-table .table-img {
+    width: 50px !important;
+    height: 40px !important;
+  }
+  
+  .cart-table .d-flex.align-items-center {
+    gap: 8px !important;
+  }
+  
+  .cart-table .form-control-sm {
+    width: 60px !important;
+    font-size: 12px;
+  }
+  
+  .cart-table .btn-sm {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  
+  .cart-table td {
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+  
+  .cart-table .d-flex.gap-2 {
+    gap: 4px !important;
+    flex-wrap: nowrap;
+  }
+  
+  /* Progress steps mobile */
+  .progress-steps {
+    gap: 6px;
+  }
+  
+  .step {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .step-number {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+  
+  .step span:not(.step-number) {
+    display: none;
+  }
+  
+  .step.active span:not(.step-number) {
+    display: inline;
   }
   
   .product-grid-modern {

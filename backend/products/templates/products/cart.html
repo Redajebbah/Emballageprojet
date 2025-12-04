@@ -198,6 +198,87 @@ textarea.form-input-modern {
     box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
 }
 
+/* Mobile cart table improvements */
+@media (max-width: 768px) {
+    .cart-table {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .cart-table .table {
+        margin-bottom: 0;
+    }
+    
+    .cart-table .table thead {
+        display: none;
+    }
+    
+    .cart-table .table tbody tr {
+        display: block;
+        margin-bottom: 16px;
+        border: 2px solid #E5DCC9;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+    }
+    
+    .cart-table .table tbody tr td {
+        display: block;
+        text-align: left;
+        padding: 12px 16px;
+        border: none;
+        border-bottom: 1px solid #F5F1E8;
+    }
+    
+    .cart-table .table tbody tr td:last-child {
+        border-bottom: none;
+        text-align: center;
+        background: #FAFAF8;
+    }
+    
+    .cart-table .table tbody tr td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--primary-dark);
+        display: block;
+        margin-bottom: 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .cart-table .table tbody tr td:first-child::before {
+        display: none;
+    }
+    
+    .cart-table .table tbody tr td:first-child .d-flex {
+        flex-direction: row;
+    }
+    
+    .cart-table .table tbody tr td form {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .cart-table .item-price::before {
+        content: "Prix unitaire";
+    }
+    
+    .cart-table .item-subtotal::before {
+        content: "Sous-total";
+    }
+    
+    .checkout-form-container {
+        padding: 20px;
+    }
+    
+    .order-summary {
+        padding: 20px;
+    }
+}
+
 .btn-whatsapp:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
