@@ -71,19 +71,55 @@
     }, true);
   }
 
-  // Mobile nav toggle (if needed)
+  // Mobile nav toggle - Smooth animated dropdown menu
   function initMobileNav(){
-    const nav = document.querySelector('.eb-nav');
-    if (!nav) return;
-    // add hamburger for small screens
-    const util = document.createElement('div');
-    util.className = 'eb-nav-util d-md-none';
-    util.innerHTML = '<button id="eb-nav-toggle" aria-label="toggle navigation" style="border:0;background:transparent;font-size:22px">☰</button>';
-    nav.querySelector('.container').appendChild(util);
-    const panel = document.createElement('div'); panel.id='eb-mobile-menu'; panel.style.cssText='position:fixed;left:0;right:0;top:64px;background:var(--white);padding:12px;border-top:1px solid rgba(226,232,240,0.9);display:none;z-index:95;';
-    panel.innerHTML = '<a href="/products/" class="d-block py-2">Tous les produits</a><a href="/products/cart/" class="d-block py-2">Panier</a>';
-    document.body.appendChild(panel);
-    document.getElementById('eb-nav-toggle').addEventListener('click', ()=>{ panel.style.display = panel.style.display === 'none' ? 'block' : 'none'; });
+    const toggle = document.getElementById('mobileMenuToggle');
+    const menu = document.getElementById('mobileMenu');
+    
+    if (!toggle || !menu) return;
+    
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      // Toggle active states
+      toggle.classList.toggle('active');
+      menu.classList.toggle('active');
+      
+      // Close menu when clicking outside
+      if (menu.classList.contains('active')) {
+        setTimeout(() => {
+          document.addEventListener('click', closeMenuOnClickOutside);
+        }, 100);
+      } else {
+        document.removeEventListener('click', closeMenuOnClickOutside);
+      }
+    });
+    
+    function closeMenuOnClickOutside(e) {
+      if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+        document.removeEventListener('click', closeMenuOnClickOutside);
+      }
+    }
+    
+    // Close menu when a link is clicked
+    menu.querySelectorAll('.mobile-menu-item').forEach(item => {
+      item.addEventListener('click', function() {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+        document.removeEventListener('click', closeMenuOnClickOutside);
+      });
+    });
+    
+    // Close menu on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && menu.classList.contains('active')) {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+        document.removeEventListener('click', closeMenuOnClickOutside);
+      }
+    });
   }
 
   // Tiny search suggestions using product titles visible on page
