@@ -9,8 +9,26 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-dev-key')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = ['*']  # You can replace '*' with your Render domain later
 
+# If running behind Render (or another proxy) so request.is_secure() works
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# CSRF and CORS — configure via environment variables in production
+# Example env values: 'https://emboitage.com,https://www.emboitage.com'
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    'CSRF_TRUSTED_ORIGINS',
+    'https://emboitage.com,https://www.emboitage.com'
+).split(',')
+
+# If you install django-cors-headers, you can use this setting to allow
+# the frontend (hosted on Vercel) to call the API.
+CORS_ALLOWED_ORIGINS = os.environ.get(
+    'CORS_ALLOWED_ORIGINS',
+    'https://emboitage.com,https://www.emboitage.com'
+).split(',')
+
 # Applications
 INSTALLED_APPS = [
+    'corsheaders',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # for serving static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
