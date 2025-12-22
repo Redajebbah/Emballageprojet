@@ -35,6 +35,11 @@ def product_list(request):
     else:
         products = Product.objects.all()
 
+    # Filter by promotion if requested
+    if request.GET.get('promotion'):
+        from django.db.models import F
+        products = products.filter(old_price__gt=F('price'))
+
     # performance: include category relationship for templates
     products = products.select_related('category')
 
