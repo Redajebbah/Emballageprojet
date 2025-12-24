@@ -106,6 +106,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Static Files Storage (WhiteNoise)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Cloudinary Storage
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dtapfeeqm',
