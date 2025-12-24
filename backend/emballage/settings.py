@@ -106,8 +106,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Static Files Storage (WhiteNoise)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Static Files Storage (WhiteNoise) replaced by STORAGES below
 
 # Cloudinary Storage
 CLOUDINARY_STORAGE = {
@@ -115,4 +114,13 @@ CLOUDINARY_STORAGE = {
     'API_KEY': '419542654229626',
     'API_SECRET': 'QDShW83mMTQl9SdFnTaacG6fb-o',
 }
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Modern Django Storage Configuration (for Django 4.2+)
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
