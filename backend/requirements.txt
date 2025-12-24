@@ -10,3 +10,4 @@ gunicorn==21.2.0
 dj-database-url==1.0.0
 whitenoise==6.4.0
 django-cors-headers
+python-dotenv
