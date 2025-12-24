@@ -1,4 +1,6 @@
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import dj_database_url
 
@@ -28,6 +30,9 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
 
 # Applications
 INSTALLED_APPS = [
+    'cloudinary_storage',
+    'django.contrib.staticfiles',
+    'cloudinary',
     'corsheaders',
     'jazzmin',
     'django.contrib.admin',
@@ -35,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+
     'rest_framework',
     'categories',
     'adminpanel',
@@ -100,3 +105,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Cloudinary Storage
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dtapfeeqm',
+    'API_KEY': '419542654229626',
+    'API_SECRET': 'QDShW83mMTQl9SdFnTaacG6fb-o',
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
