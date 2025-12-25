@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 import dj_database_url
+import cloudinary.utils
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -109,12 +110,27 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Compatibility fix for django-cloudinary-storage (required)
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-# Cloudinary Storage
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dtapfeeqm',
-    'API_KEY': '419542654229626',
-    'API_SECRET': 'QDShW83mMTQl9SdFnTaacG6fb-o',
-}
+# Cloudinary Storage Configuration
+# Using official SDK util to parse CLOUDINARY_URL and ensure clean, synced credentials
+_curl = os.environ.get('CLOUDINARY_URL', '').strip()
+if _curl:
+    _c = cloudinary.utils.config_from_url(_curl)
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': _c.cloud_name,
+        'API_KEY': _c.api_key,
+        'API_SECRET': _c.api_secret,
+        'SECURE': True,
+    }
+    # Sync the base library config to match the storage backend
+    cloudinary.config(
+        cloud_name=_c.cloud_name,
+        api_key=_c.api_key,
+        api_secret=_c.api_secret,
+        secure=True
+    )
+else:
+    # Minimal fallback
+    CLOUDINARY_STORAGE = {}
 
 # Modern Django Storage Configuration (Django 4.2+)
 STORAGES = {
