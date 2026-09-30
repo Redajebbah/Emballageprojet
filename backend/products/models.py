@@ -26,6 +26,10 @@ class Product(models.Model):
     image2 = models.ImageField(upload_to="products/", blank=True, null=True)
     image3 = models.ImageField(upload_to="products/", blank=True, null=True)
 
+    class Meta:
+        verbose_name = "Produit"
+        verbose_name_plural = "Produits"
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)

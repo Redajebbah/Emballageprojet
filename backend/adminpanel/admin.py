@@ -1,8 +1,3 @@
-from django.contrib import admin
-from .models import ProductImage
-
-
-@admin.register(ProductImage)
-class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product', 'alt', 'image')
-    search_fields = ('product__name', 'alt')
+# ProductImage ("images supplementaires") is not displayed on the public site,
+# so it is intentionally not registered in the admin. Product photos are the
+# image / image2 / image3 fields of Product.

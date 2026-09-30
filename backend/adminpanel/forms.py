@@ -1,15 +1,6 @@
 from django import forms
-from products.models import Product
+from products.models import Product, ProductSize
 from categories.models import Category
-from .models import ProductImage
-from django.forms.widgets import ClearableFileInput
-
-
-# ---------------------------
-# Custom widget for multiple images
-# ---------------------------
-class MultipleFileInput(ClearableFileInput):
-    allow_multiple_selected = True
 
 
 # ---------------------------
@@ -38,12 +29,6 @@ class AdminLoginForm(forms.Form):
 # Add / Edit Product Form
 # ---------------------------
 class ProductForm(forms.ModelForm):
-    # Multiple image upload support (Django 5 compliant)
-    images = forms.FileField(
-        widget=MultipleFileInput(),
-        required=False
-    )
-
     class Meta:
         model = Product
         fields = [
@@ -78,3 +63,20 @@ class ProductForm(forms.ModelForm):
             'image2': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'image3': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+
+
+# ---------------------------
+# Sizes & prices of a product (e.g. "30x20" -> 12.50)
+# ---------------------------
+ProductSizeFormSet = forms.inlineformset_factory(
+    Product,
+    ProductSize,
+    fields=['label', 'price'],
+    labels={'label': 'Taille', 'price': 'Prix'},
+    widgets={
+        'label': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ex : 30x20'}),
+        'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+    },
+    extra=3,
+    can_delete=True,
+)

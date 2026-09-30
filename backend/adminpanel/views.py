@@ -7,8 +7,7 @@ from django.db.models import Count
 
 from products.models import Product
 from categories.models import Category
-from .models import ProductImage
-from .forms import AdminLoginForm, ProductForm
+from .forms import AdminLoginForm, ProductForm, ProductSizeFormSet
 from .decorators import admin_required
 
 
@@ -72,20 +71,18 @@ def products_list(request):
 def products_add(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            prod = form.save(commit=False)
-            # ensure slug is generated as in model save
-            prod.save()
-            # handle images
-            files = request.FILES.getlist('images')
-            for f in files:
-                ProductImage.objects.create(product=prod, image=f)
+        sizes = ProductSizeFormSet(request.POST, prefix='sizes')
+        if form.is_valid() and sizes.is_valid():
+            prod = form.save()
+            sizes.instance = prod
+            sizes.save()
             messages.success(request, 'Produit ajouté avec succès')
             return redirect('adminpanel:products_list')
     else:
         form = ProductForm()
+        sizes = ProductSizeFormSet(prefix='sizes')
 
-    return render(request, 'adminpanel/product_form.html', {'form': form, 'is_add': True})
+    return render(request, 'adminpanel/product_form.html', {'form': form, 'sizes': sizes, 'is_add': True})
 
 
 @admin_required
@@ -93,18 +90,17 @@ def products_edit(request, pk):
     prod = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=prod)
-        if form.is_valid():
-            prod = form.save()
-            files = request.FILES.getlist('images')
-            for f in files:
-                ProductImage.objects.create(product=prod, image=f)
+        sizes = ProductSizeFormSet(request.POST, instance=prod, prefix='sizes')
+        if form.is_valid() and sizes.is_valid():
+            form.save()
+            sizes.save()
             messages.success(request, 'Produit mis à jour')
             return redirect('adminpanel:products_list')
     else:
         form = ProductForm(instance=prod)
+        sizes = ProductSizeFormSet(instance=prod, prefix='sizes')
 
-    images = prod.extra_images.all()
-    return render(request, 'adminpanel/product_form.html', {'form': form, 'product': prod, 'images': images, 'is_add': False})
+    return render(request, 'adminpanel/product_form.html', {'form': form, 'sizes': sizes, 'product': prod, 'is_add': False})
 
 
 @admin_required

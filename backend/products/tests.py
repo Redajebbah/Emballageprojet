@@ -104,7 +104,7 @@ class ProductSizesTests(TestCase):
 		content = resp.content.decode('utf-8')
 		self.assertIn('10x14', content)
 		self.assertIn('14x18', content)
-		self.assertIn('12.5', content)  # price formatting might show 12.50
+		self.assertIn('12,50', content)  # French number format
 
 	def test_admin_product_has_sizes_inline(self):
 		# import the registered ModelAdmin and ensure our inline is present

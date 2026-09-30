@@ -4,7 +4,7 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-lg-8">
       <div class="card p-3 shadow-sm border-0">
         <h4>{% if is_add %}Ajouter{% else %}Modifier{% endif %} Produit</h4>
         <form method="post" enctype="multipart/form-data">
@@ -19,10 +19,25 @@
             </div>
           {% endfor %}
 
-          <div class="mb-3">
-            <label for="id_images" class="form-label">Images supplémentaires</label>
-            <input id="id_images" type="file" name="images" multiple class="form-control">
-          </div>
+          <h5 class="mt-4">Tailles et prix</h5>
+          <p class="text-muted small">Optionnel : chaque ligne est une taille avec son propre prix (ex : 30x20 — 12.50). Laissez vide les lignes inutiles.</p>
+          {{ sizes.management_form }}
+          {{ sizes.non_form_errors }}
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr><th>Taille</th><th>Prix</th>{% if not is_add %}<th>Supprimer</th>{% endif %}</tr>
+            </thead>
+            <tbody>
+              {% for f in sizes %}
+                <tr>
+                  <td>{{ f.id }}{{ f.label }}{% if f.label.errors %}<div class="text-danger small">{{ f.label.errors }}</div>{% endif %}</td>
+                  <td>{{ f.price }}{% if f.price.errors %}<div class="text-danger small">{{ f.price.errors }}</div>{% endif %}</td>
+                  {% if not is_add %}<td>{% if f.instance.pk %}{{ f.DELETE }}{% endif %}</td>{% endif %}
+                </tr>
+                {% if f.non_field_errors %}<tr><td colspan="3" class="text-danger small">{{ f.non_field_errors }}</td></tr>{% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
 
           <div class="d-flex gap-2">
             <button class="btn btn-primary">Enregistrer</button>
@@ -32,17 +47,19 @@
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-lg-4">
       {% if not is_add and product %}
         <div class="card p-3 shadow-sm border-0">
-          <h6>Images</h6>
+          <h6>Images actuelles</h6>
           <div class="d-grid gap-2">
-            {% for img in images %}
-              <div class="ratio ratio-1x1" style="background-image:url({{ img.image.url }}); background-size:cover; background-position:center; border-radius:8px"></div>
-            {% empty %}
+            {% if product.image %}<img src="{{ product.image.url }}" alt="Image principale" class="img-fluid rounded">{% endif %}
+            {% if product.image2 %}<img src="{{ product.image2.url }}" alt="Image 2" class="img-fluid rounded">{% endif %}
+            {% if product.image3 %}<img src="{{ product.image3.url }}" alt="Image 3" class="img-fluid rounded">{% endif %}
+            {% if not product.image and not product.image2 and not product.image3 %}
               <div class="text-muted">Aucune image</div>
-            {% endfor %}
+            {% endif %}
           </div>
+          <a href="{% url 'product_detail_root' product.slug %}" target="_blank" class="btn btn-sm btn-outline-secondary mt-3">Voir sur le site</a>
         </div>
       {% endif %}
     </div>

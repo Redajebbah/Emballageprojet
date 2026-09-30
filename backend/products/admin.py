@@ -1,18 +1,6 @@
 from django.contrib import admin
 from .models import Product, ProductSize
 
-try:
-    # optional inline from adminpanel if installed
-    from adminpanel.models import ProductImage
-except Exception:
-    ProductImage = None
-
-
-class ProductImageInline(admin.TabularInline):
-    model = ProductImage
-    extra = 1
-    readonly_fields = ('__str__',) if ProductImage else ()
-
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -27,7 +15,5 @@ class ProductAdmin(admin.ModelAdmin):
         model = ProductSize
         extra = 1
 
-    if ProductImage:
-        inlines = (ProductSizeInline, ProductImageInline)
-    else:
-        inlines = (ProductSizeInline,)
+    # Photos shown on the site are the image / image2 / image3 fields.
+    inlines = (ProductSizeInline,)
