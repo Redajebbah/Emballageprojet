@@ -65,7 +65,7 @@ class ProductListViewTests(TestCase):
 		self.assertEqual(resp.status_code, 200)
 		content = resp.content.decode('utf-8')
 		# home page should include the hero title text
-		self.assertIn('Découvrez nos produits', content)
+		self.assertIn('protège vos produits', content)
 
 	def test_no_stock_or_cart_on_public_pages(self):
 		for url in ['/', '/products/', f"/product/{self.p1.slug}/"]:
@@ -79,6 +79,24 @@ class ProductListViewTests(TestCase):
 		content = resp.content.decode('utf-8')
 		self.assertIn('https://wa.me/', content)
 		self.assertIn('Demander un devis', content)
+
+
+	def test_search_filters_products(self):
+		resp = self.client.get('/products/?q=sachet')
+		content = resp.content.decode('utf-8')
+		self.assertIn(self.p3.name, content)
+		self.assertNotIn(self.p1.name, content)
+
+	def test_category_menu_is_built_from_database(self):
+		content = self.client.get('/').content.decode('utf-8')
+		self.assertIn(f'?category={self.cat1.slug}', content)
+		self.assertIn(f'?category={self.cat2.slug}', content)
+
+	def test_product_detail_shows_size_chips(self):
+		from .models import ProductSize
+		ProductSize.objects.create(product=self.p1, label='30x20', price=12.50)
+		content = self.client.get(f"/product/{self.p1.slug}/").content.decode('utf-8')
+		self.assertIn('data-size-label="30x20"', content)
 
 
 class ProductSizesTests(TestCase):

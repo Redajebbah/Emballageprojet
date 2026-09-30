@@ -1,302 +1,198 @@
 {% extends 'products/base.html' %}
-{% load whatsapp %}
 {% load static %}
-{% block title %}Accueil — Les meilleures solutions d'emboitage au Maroc{% endblock %}
+{% block title %}Emboitage — Cartons, boîtes et emballages au Maroc{% endblock %}
 
-{% block hero %}
-<!-- HERO SLIDER -->
-<section class="hero-slider">
-  <div class="hero-slide active" style="background: linear-gradient(135deg, #C9A66B 0%, #8B6F47 100%);">
-    <div class="container">
-      <div class="row align-items-center py-5">
-        <div class="col-lg-6">
-          <div class="hero-content">
-            <span class="hero-badge">Livraison à partir de 50 Unités</span>
-            <h1 class="hero-title">Découvrez nos produits d'emboitage et carton au Maroc</h1>
-            <p class="hero-text">L'emboitage de qualité pour envoyer vos produits en toutes sécurité — les meilleures
-              solutions</p>
-            <a href="/products/" class="btn btn-hero">Découvrir tous nos produits</a>
-          </div>
-        </div>
-        <div class="col-lg-6 d-none d-lg-block text-center">
-          <div class="hero-img-professional"
-            style="width: 100%; height: 450px; background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(245,241,232,0.95) 100%); border-radius: 20px; box-shadow: 0 20px 60px rgba(139,111,71,0.15); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 2px solid rgba(201,166,107,0.2);">
-            <!-- Subtle pattern overlay -->
-            <div
-              style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at 20% 50%, rgba(201,166,107,0.03) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(139,111,71,0.03) 0%, transparent 50%);">
-            </div>
+{% block extra_head %}
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" crossorigin>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+{% endblock %}
 
-            <!-- Decorative circles -->
-            <div
-              style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(201,166,107,0.08), transparent); opacity: 0.6;">
-            </div>
-            <div
-              style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, rgba(139,111,71,0.06), transparent); opacity: 0.5;">
-            </div>
-
-            <!-- Content -->
-            <div style="position: relative; z-index: 2; text-align: center; padding: 50px 40px;">
-              <!-- Professional packaging illustration -->
-              <img src="{% static 'images/LogoEmboitage.jpg' %}" alt="Logo Emboitage" class="img-fluid mx-auto d-block"
-                style="max-width: 420px; width: 100%; height: auto; border-radius: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); background: #fff;" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURE BOXES -->
-<section class="feature-boxes">
-  <div class="container">
-    <div class="row g-3">
-      <div class="col-6 col-md-3">
-        <div class="feature-box">
-          <div class="feature-icon">
-            <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-              <path
-                d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z" />
-            </svg>
-          </div>
-          <div class="feature-title">Support</div>
-          <div class="feature-sub">24h/24 et 7j/7</div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="feature-box">
-          <div class="feature-icon">
-            <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-              <path
-                d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z" />
-            </svg>
-          </div>
-          <div class="feature-title">Le plus grand choix</div>
-          <div class="feature-sub">Pour les professionnels</div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="feature-box">
-          <div class="feature-icon">
-            <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-              <path
-                d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-2zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z" />
-            </svg>
-          </div>
-          <div class="feature-title">Paiement</div>
-          <div class="feature-sub">À la livraison</div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="feature-box">
-          <div class="feature-icon">
-            <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-              <path
-                d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-            </svg>
-          </div>
-          <div class="feature-title">Livraison gratuite</div>
-          <div class="feature-sub">à partir de 10.000 MAD</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- EXPLOREZ NOS GAMMES -->
-<section class="categories-showcase">
-  <div class="container">
-    <div class="section-header text-center">
-      <h2 class="section-title">Explorez nos gammes d'emboitage</h2>
-      <p class="section-subtitle">Sachets, cartons et emboitage pour e-commerce – Solutions d'expédition sécurisées</p>
-      <a href="/products/" class="btn btn-primary-ebb">Découvrir tous nos produits</a>
-    </div>
-
-    <div class="row g-4 mt-2">
-      {% for category in categories %}
-      <div class="col-6 col-md-3">
-        <a href="/products/?category={{ category.slug }}" class="category-showcase-card">
-          {% if category.image %}
-          <div class="category-img"
-            style="background-image: url('{{ category.image.url }}'); background-size: cover; background-position: center;">
-          </div>
-          {% else %}
-          <div class="category-img" style="background: linear-gradient(135deg, #D4B896 0%, #C9A66B 100%);"></div>
-          {% endif %}
-          <div class="category-name">{{ category.name }}</div>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+{% block extra_js %}
+  <script type="module" src="{% static 'js/hero3d.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-<!-- DERNIERS PRODUITS -->
-<section class="products-section">
+<!-- Hero -->
+<section class="hero">
   <div class="container">
-    <div class="section-header-inline">
-      <h3 class="section-title-small">Derniers produits</h3>
-      <a href="/products/" class="view-all-link">Voir tout →</a>
+    <div class="hero-copy">
+      <span class="eyebrow">Emballage &amp; conditionnement · Maroc</span>
+      <h1 class="display">L'emballage qui protège vos produits <em>et votre image.</em></h1>
+      <p class="hero-lead">Cartons, boîtes, sachets, stickers et solutions de calage pour les professionnels et l'e-commerce. Choisissez vos références, demandez votre devis sur WhatsApp, nous livrons partout au Maroc.</p>
+      <div class="hero-ctas">
+        <a href="{% url 'products:product_list' %}" class="btn btn-dark">Voir le catalogue <svg class="icon-sm"><use href="#i-arrow"/></svg></a>
+        <a href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon-sm"><use href="#i-whatsapp"/></svg>Devis en 5 minutes</a>
+      </div>
+      <div class="hero-proof">
+        <div><strong>50</strong><span>unités minimum</span></div>
+        <div><strong>48h</strong><span>partout au Maroc</span></div>
+        <div><strong>Gros</strong><span>&amp; détail</span></div>
+      </div>
     </div>
 
-    <div class="product-grid-modern">
-      {% for product in products|slice:":8" %}
-      <div class="product-card-modern">
-        <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none"
-          style="position:relative; display:block;">
-          {% if product.image %}
-          <div class="product-img-modern"
-            style="background-image: url('{{ product.image.url }}');">
-          </div>
-          {% else %}
-          <div class="product-img-modern"
-            style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);">
-          </div>
-          {% endif %}
+    <div class="hero-visual" aria-hidden="true" data-hero-3d>
+      <div class="hero-disc"></div>
+      <svg class="hero-cubes" viewBox="-37 0 174 150">
+        <g><g class="cube">
+          <path d="M50 0 93.3 25 50 50 6.7 25Z" fill="#E4C88F"/>
+          <path d="M6.7 25 50 50v50L6.7 75Z" fill="#C29A5C"/>
+          <path d="M50 50 93.3 25v50L50 100Z" fill="#6E5231"/>
+        </g></g>
+        <g transform="translate(-43.3 50)"><g class="cube">
+          <path d="M50 0 93.3 25 50 50 6.7 25Z" fill="#D9BA7C"/>
+          <path d="M6.7 25 50 50v50L6.7 75Z" fill="#B58D52"/>
+          <path d="M50 50 93.3 25v50L50 100Z" fill="#5E4A30"/>
+        </g></g>
+        <g transform="translate(43.3 50)"><g class="cube">
+          <path d="M50 0 93.3 25 50 50 6.7 25Z" fill="#E4C88F"/>
+          <path d="M6.7 25 50 50v50L6.7 75Z" fill="#C9A66B"/>
+          <path d="M50 50 93.3 25v50L50 100Z" fill="#7A5C37"/>
+        </g></g>
+      </svg>
+      <div class="hero-chip c1"><i><svg class="icon-sm"><use href="#i-box"/></svg></i>Cartons &amp; boîtes</div>
+      <div class="hero-chip c2"><i><svg class="icon-sm"><use href="#i-truck"/></svg></i>Livraison 48h</div>
+      <div class="hero-chip c3"><i><svg class="icon-sm"><use href="#i-shield"/></svg></i>Protection &amp; calage</div>
+    </div>
+  </div>
+</section>
 
-          <div class="product-info-modern">
-            <div class="product-name-modern">{{ product.name|truncatechars:40 }}</div>
-            <div class="d-flex justify-content-between align-items-center mt-2">
-              <div class="product-price-modern">{{ product.price }} <small>MAD</small></div>
-              {% if product.discount %}
-              <span class="discount-badge">-{{ product.discount }}%</span>
-              {% endif %}
-            </div>
-          </div>
-        </a>
+<!-- Reassurance -->
+<section class="assurance" aria-label="Nos engagements">
+  <div class="container">
+    <ul>
+      <li><span class="a-icon"><svg class="icon"><use href="#i-headset"/></svg></span><div><strong>Support 7j/7</strong><span>24h/24 sur WhatsApp</span></div></li>
+      <li><span class="a-icon"><svg class="icon"><use href="#i-box"/></svg></span><div><strong>Le plus grand choix</strong><span>Pour les professionnels</span></div></li>
+      <li><span class="a-icon"><svg class="icon"><use href="#i-wallet"/></svg></span><div><strong>Paiement</strong><span>À la livraison</span></div></li>
+      <li><span class="a-icon"><svg class="icon"><use href="#i-truck"/></svg></span><div><strong>Livraison gratuite</strong><span>Dès 10 000 MAD</span></div></li>
+    </ul>
+  </div>
+</section>
 
-        <a href="{% whatsapp_url product %}" target="_blank" rel="noopener" class="btn-add-cart"
-          title="Demander un devis sur WhatsApp" aria-label="Demander un devis sur WhatsApp : {{ product.name }}">
-          <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
-        </a>
+<!-- Categories -->
+{% if categories %}
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Nos gammes</span>
+        <h2 class="display">Tout pour emballer, protéger et expédier.</h2>
       </div>
+      <p>Sachets, cartons et boîtes pour l'e-commerce, emballages alimentaires, stickers et calage : des solutions d'expédition sûres, en petite ou grande quantité.</p>
+    </div>
+    <div class="cat-grid">
+      {% for category in categories %}
+        <a href="{% url 'products:product_list' %}?category={{ category.slug }}" class="cat-card reveal{% if category.image %} has-image{% endif %}">
+          {% if category.image %}
+            <img src="{{ category.image.url }}" alt="" loading="lazy" onerror="this.parentNode.classList.remove('has-image');this.remove();">
+          {% endif %}
+          <svg class="cat-mark" aria-hidden="true" style="color:var(--brown)"><use href="#i-cubes"/></svg>
+          <h3>{{ category.name }}</h3>
+          <div class="cat-meta">
+            <span>{{ category.product_count }} produit{{ category.product_count|pluralize }}</span>
+            <span class="arrow"><svg class="icon-sm"><use href="#i-arrow"/></svg></span>
+          </div>
+        </a>
       {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
-<!-- BIENVENUE SECTION -->
-<section class="welcome-section">
+<!-- Latest products -->
+{% if products %}
+<section class="section" style="padding-top:0">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6">
-        <h2 class="welcome-title">Bienvenue sur Emboitage, votre boutique en ligne N°1 au Maroc !</h2>
-        <p class="welcome-text">Elle vous offre les meilleurs Emboitage et Cartons pour l'E-Commerce afin d'envoyer vos
-          produits d'une manière sûre et sécurisée avec une qualité garantie. Vous avez la possibilité d'acheter à
-          partir de 50 Unités et une livraison partout au Maroc sous 48h.</p>
-
-        <div class="welcome-features">
-          <div class="wf-item">
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-              <path
-                d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-            </svg>
-            <span>Des boîtes prêtes à l'emploi à portée de clic</span>
-          </div>
-          <div class="wf-item">
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-              <path
-                d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-            </svg>
-            <span>Commande petite ou grande quantité</span>
-          </div>
-          <div class="wf-item">
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-              <path
-                d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-            </svg>
-            <span>Solutions d'emboitage professionnelles</span>
-          </div>
-        </div>
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Nouveautés</span>
+        <h2 class="display">Derniers produits</h2>
       </div>
-      <div class="col-lg-6 col-12 mt-4 mt-lg-0">
-        <div class="welcome-img-professional"
-          style="width: 100%; height: 450px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(139,111,71,0.12); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 1px solid rgba(229,220,201,0.5);">
-          <!-- Background decorative elements -->
-          <div
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 200px; background: linear-gradient(180deg, rgba(245,241,232,0.4) 0%, transparent 100%);">
-          </div>
-          <div
-            style="position: absolute; bottom: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle, rgba(201,166,107,0.06), transparent); opacity: 0.7;">
-          </div>
+      <a href="{% url 'products:product_list' %}" class="link-arrow">Voir tout le catalogue <svg class="icon-sm"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="product-grid cols-4">
+      {% for product in products %}
+        {% include 'products/_product_card.html' %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
 
-          <!-- Content -->
-          <div
-            style="position: relative; z-index: 2; text-align: center; padding: 20px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-            <style>
-              @keyframes floatLogo {
-                0% {
-                  transform: translateY(0px);
-                }
-
-                50% {
-                  transform: translateY(-10px);
-                }
-
-                100% {
-                  transform: translateY(0px);
-                }
-              }
-
-              .logo-animate {
-                animation: floatLogo 4s ease-in-out infinite;
-                box-shadow: 0 10px 40px rgba(139, 111, 71, 0.25);
-                border: 4px solid #fff;
-              }
-            </style>
-            <img src="{% static 'images/LogoEmboitage.jpg' %}" alt="Logo Emboitage" class="img-fluid logo-animate"
-              style="max-width: 100%; max-height: 380px; width: auto; height: auto; border-radius: 20px; object-fit: contain;" />
-          </div>
-        </div>
+<!-- About -->
+<section class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="story">
+      <div class="reveal">
+        <span class="eyebrow">Qui sommes-nous</span>
+        <h2 class="display">Votre partenaire emballage au Maroc.</h2>
+        <p>Emboitage vous propose les meilleurs cartons et emballages pour l'e-commerce, afin d'envoyer vos produits de manière sûre, avec une qualité garantie. Achetez à partir de 50 unités et recevez votre commande partout au Maroc sous 48h.</p>
+        <ul class="checklist">
+          <li><svg class="icon"><use href="#i-check"/></svg>Des boîtes prêtes à l'emploi, à portée de clic</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Commandes en petite ou grande quantité</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Solutions d'emballage professionnelles et sur-mesure</li>
+        </ul>
+      </div>
+      <div class="story-visual reveal">
+        <div class="story-logo"><img src="{% static 'images/EmboitageLogo.png' %}" alt="Emboitage"></div>
+        <p class="story-quote">« Un bon emballage, c'est la première impression de votre marque. »
+          <small>بيع بالجملة و التقسيط — جميع مواد التغليف و التعليب</small>
+        </p>
       </div>
     </div>
   </div>
 </section>
-{% endblock %}
 
-{% block fullwidth %}
-<!-- Contact / CTA section -->
-<section id="contact" class="cta-section">
+<!-- How to order -->
+<section class="section" id="comment-commander">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
-        <h3 class="cta-title">Besoin d'un emboitage sur-mesure ?</h3>
-        <p class="cta-text">Contactez notre équipe pour un devis personnalisé. Nous proposons des solutions pour petites
-          et grandes séries.</p>
-        <a href="tel:0658283277" class="btn btn-cta">
-          <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-            <path
-              d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z" />
-          </svg>
-          Demander un devis
-        </a>
-      </div>
-      <div class="col-lg-6">
-        <div class="contact-form-box">
-          <form action="#" method="post" class="contact-form">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <input type="text" class="form-control-modern" placeholder="Nom / Société" required>
-              </div>
-              <div class="col-md-6">
-                <input type="email" class="form-control-modern" placeholder="Email" required>
-              </div>
-              <div class="col-12">
-                <input type="text" class="form-control-modern" placeholder="Sujet" required>
-              </div>
-              <div class="col-12">
-                <textarea class="form-control-modern" rows="3" placeholder="Message"></textarea>
-              </div>
-              <div class="col-12">
-                <button type="submit" class="btn btn-submit-form">Envoyer</button>
-              </div>
-            </div>
-          </form>
-        </div>
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Comment commander</span>
+        <h2 class="display">Simple, rapide, sans inscription.</h2>
       </div>
     </div>
+    <div class="steps">
+      <div class="step reveal"><h3>Choisissez vos produits</h3><p>Parcourez le catalogue et repérez les références, tailles et quantités qui vous conviennent.</p></div>
+      <div class="step reveal"><h3>Demandez votre devis</h3><p>Un clic sur WhatsApp : votre demande arrive avec le produit concerné. Nous vous répondons rapidement.</p></div>
+      <div class="step reveal"><h3>Recevez votre commande</h3><p>Livraison partout au Maroc sous 48h, paiement à la livraison.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="contact section" id="contact">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Contact</span>
+      <h2 class="display">Besoin d'un emballage sur-mesure&nbsp;?</h2>
+      <p class="contact-lead">Contactez notre équipe pour un devis personnalisé. Nous accompagnons les petites comme les grandes séries.</p>
+      <div class="contact-list">
+        {% for phone in CONTACT_PHONES %}
+          <a href="tel:{{ phone|cut:' ' }}"><i><svg class="icon-sm"><use href="#i-phone"/></svg></i>{{ phone }}</a>
+        {% endfor %}
+        <a href="mailto:{{ CONTACT_EMAIL }}"><i><svg class="icon-sm"><use href="#i-mail"/></svg></i>{{ CONTACT_EMAIL }}</a>
+        <a href="{{ INSTAGRAM_URL }}" target="_blank" rel="noopener"><i><svg class="icon-sm"><use href="#i-instagram"/></svg></i>@emboitage</a>
+      </div>
+    </div>
+
+    <form class="wa-form reveal" data-wa-form data-wa-number="{{ WHATSAPP_NUMBER }}">
+      <h3>Demande de devis</h3>
+      <p>Votre message s'ouvre directement dans WhatsApp, prêt à être envoyé.</p>
+      <div class="field-row two">
+        <div class="field"><label for="f-name">Nom / Société</label><input id="f-name" name="name" required autocomplete="organization"></div>
+        <div class="field"><label for="f-city">Ville</label><input id="f-city" name="city" autocomplete="address-level2"></div>
+      </div>
+      <div class="field"><label for="f-msg">Votre besoin</label><textarea id="f-msg" name="message" required placeholder="Ex : 500 boîtes 30x20x10, impression logo…"></textarea></div>
+      <button type="submit" class="btn btn-dark btn-block"><svg class="icon-sm"><use href="#i-whatsapp"/></svg>Envoyer sur WhatsApp</button>
+      <p class="form-note">Réponse rapide, 7j/7.</p>
+    </form>
   </div>
 </section>
 {% endblock %}

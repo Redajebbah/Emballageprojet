@@ -1,44 +1,36 @@
 {% extends 'products/base.html' %}
-
-{% block title %}Tailles — {{ product.name }}{% endblock %}
-
-{% block hero %}
-<div class="site-hero container mb-3">
-  <div class="hero-box">
-    <div class="row align-items-center">
-      <div class="col-md-9">
-        <h2 class="hero-title">Tailles pour « {{ product.name }} »</h2>
-        <p class="hero-sub muted">Sélectionnez la taille qui correspond à vos besoins — chaque taille possède son prix.</p>
-      </div>
-      <div class="col-md-3 text-md-end">
-        <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-outline-secondary">Retour au produit</a>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
+{% block title %}Tailles — {{ product.name }} — Emboitage{% endblock %}
 
 {% block content %}
-  <div class="card-ep p-4">
-    {% if sizes %}
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Tailles</th>
-            <th>Prix</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for s in sizes %}
-            <tr>
-              <td>{{ s.label }}</td>
-              <td>{{ s.price }} <small class="muted">{{ product.currency }}</small></td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <div class="muted small">Aucune taille enregistrée pour ce produit.</div>
-    {% endif %}
+<header class="page-head">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <a href="/">Accueil</a><span aria-hidden="true">/</span>
+      <a href="{% url 'product_detail_root' product.slug %}">{{ product.name }}</a><span aria-hidden="true">/</span>
+      <span>Tailles</span>
+    </nav>
+    <h1 class="display">Tailles pour « {{ product.name }} »</h1>
+    <p>Chaque taille possède son propre prix. Sélectionnez celle qui correspond à vos besoins.</p>
   </div>
+</header>
+
+<section class="catalog">
+  <div class="container" style="max-width:760px">
+    {% if sizes %}
+      <div class="table-card">
+        <table>
+          <thead><tr><th>Taille</th><th>Prix</th></tr></thead>
+          <tbody>
+            {% for s in sizes %}
+              <tr><td><strong>{{ s.label }}</strong></td><td>{{ s.price }} {{ product.currency }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state"><p style="margin:0">Aucune taille enregistrée pour ce produit.</p></div>
+    {% endif %}
+    <p style="margin-top:24px"><a href="{% url 'product_detail_root' product.slug %}" class="link-arrow">Retour au produit <svg class="icon-sm"><use href="#i-arrow"/></svg></a></p>
+  </div>
+</section>
 {% endblock %}

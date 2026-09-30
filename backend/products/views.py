@@ -1,6 +1,6 @@
 # products/views.py
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Count
+from django.db.models import Count, F, Q
 
 from .models import Product
 from categories.models import Category
@@ -32,12 +32,19 @@ def product_list(request):
         products = Product.objects.all()
 
     # Filter by promotion if requested
-    if request.GET.get('promotion'):
-        from django.db.models import F
+    promotion = bool(request.GET.get('promotion'))
+    if promotion:
         products = products.filter(old_price__gt=F('price'))
 
+    # Free-text search from the header search box
+    q = request.GET.get('q', '').strip()
+    if q:
+        products = products.filter(
+            Q(name__icontains=q) | Q(description__icontains=q) | Q(category__name__icontains=q)
+        )
+
     # performance: include category relationship for templates
-    products = products.select_related('category')
+    products = products.select_related('category').order_by('-id')
 
     return render(
         request,
@@ -46,6 +53,8 @@ def product_list(request):
             'products': products,
             'categories': categories,
             'selected_category': selected_category,
+            'promotion': promotion,
+            'q': q,
         },
     )
 
@@ -55,13 +64,11 @@ def home(request):
 
     Shows a few products (e.g., popular) so homepage has content. No complex logic.
     """
-    from categories.models import Category
-    
-    # lightweight selection for the home page
-    products = Product.objects.select_related('category').all()[:8]
-    
-    # Get categories for showcase section
-    categories = Category.objects.all()[:6]
+    # newest products first
+    products = Product.objects.select_related('category').order_by('-id')[:8]
+
+    # categories for the showcase section, with their product count
+    categories = Category.objects.annotate(product_count=Count('products'))
 
     return render(request, 'products/home.html', {
         'products': products,
@@ -72,19 +79,18 @@ def product_detail(request, slug):
     product = get_object_or_404(Product.objects.select_related('category'), slug=slug)
 
     # similar products (same category) - exclude current product
-    similar_products = Product.objects.filter(category=product.category).exclude(pk=product.pk)[:4]
+    similar_products = (
+        Product.objects.select_related('category')
+        .filter(category=product.category).exclude(pk=product.pk).order_by('-id')[:4]
+    )
 
-    # Prefer the new ProductSize relation when available; fall back to the single choice size field
-    sizes_qs = getattr(product, 'sizes', None)
-    if sizes_qs and sizes_qs.exists():
-        sizes = list(sizes_qs.all())
-    else:
-        sizes = []
-        if product.size:
-            sizes = [product.size]
+    # sizes with their own price (ProductSize), shown as selectable chips
+    sizes = list(product.sizes.all())
+    images = [img for img in (product.image, product.image2, product.image3) if img]
 
     context = {
         'product': product,
+        'images': images,
         'similar_products': similar_products,
         'sizes': sizes,
     }

@@ -1,0 +1,27 @@
+{% load whatsapp %}
+<article class="pcard reveal">
+  <a href="{% url 'product_detail_root' product.slug %}" class="pcard-media{% if not product.image %} is-empty{% endif %}" aria-label="{{ product.name }}">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy"
+           onerror="this.parentNode.classList.add('is-empty');this.remove();">
+    {% endif %}
+    <div class="img-fallback" aria-hidden="true"><svg><use href="#i-cubes"/></svg><span>Emboitage</span></div>
+    {% if product.discount_percentage %}
+      <div class="pcard-badges"><span class="badge badge-promo">-{{ product.discount_percentage }}%</span></div>
+    {% endif %}
+  </a>
+  <div class="pcard-body">
+    {% if product.category %}<span class="pcard-cat">{{ product.category.name }}</span>{% endif %}
+    <h3 class="pcard-title"><a href="{% url 'product_detail_root' product.slug %}">{{ product.name }}</a></h3>
+    <div class="pcard-foot">
+      <div class="price">
+        <span class="price-now">{{ product.price }}<small>MAD</small></span>
+        {% if product.discount_percentage %}<span class="price-old">{{ product.old_price }} MAD</span>{% endif %}
+      </div>
+      <a href="{% whatsapp_url product %}" target="_blank" rel="noopener" class="pcard-wa"
+         aria-label="Demander un devis sur WhatsApp : {{ product.name }}" title="Demander un devis">
+        <svg class="icon"><use href="#i-whatsapp"/></svg>
+      </a>
+    </div>
+  </div>
+</article>
