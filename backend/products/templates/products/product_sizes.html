@@ -26,7 +26,6 @@
           <tr>
             <th>Tailles</th>
             <th>Prix</th>
-            <th>Stock</th>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +33,6 @@
             <tr>
               <td>{{ s.label }}</td>
               <td>{{ s.price }} <small class="muted">{{ product.currency }}</small></td>
-              <td>{% if s.stock is not None %}{{ s.stock }}{% else %}—{% endif %}</td>
             </tr>
           {% endfor %}
         </tbody>

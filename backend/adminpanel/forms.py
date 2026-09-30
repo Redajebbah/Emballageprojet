@@ -50,32 +50,31 @@ class ProductForm(forms.ModelForm):
             'name',
             'description',
             'price',
+            'old_price',
             'category',
             'size',
-            'stock_quantity',
-            'in_stock'
+            'image',
+            'image2',
+            'image3',
         ]
+        labels = {
+            'name': 'Nom',
+            'price': 'Prix',
+            'old_price': 'Ancien prix (promotion)',
+            'category': 'Catégorie',
+            'size': 'Taille',
+            'image': 'Image principale',
+            'image2': 'Image 2',
+            'image3': 'Image 3',
+        }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'old_price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'category': forms.Select(attrs={'class': 'form-select'}),
-            'size': forms.TextInput(attrs={'class': 'form-control'}),
-            'stock_quantity': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
-            'in_stock': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'size': forms.Select(attrs={'class': 'form-select'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'image2': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'image3': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-
-
-# ---------------------------
-# Stock Update Form
-# ---------------------------
-class StockUpdateForm(forms.Form):
-    product_id = forms.IntegerField(widget=forms.HiddenInput())
-    stock = forms.IntegerField(
-        widget=forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'min': 0
-            }
-        )
-    )

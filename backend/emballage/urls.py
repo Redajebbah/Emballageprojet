@@ -13,7 +13,6 @@ urlpatterns = [
     path('api/products/', include('products.api_urls')),
     # Friendly product detail path (client wants /product/<slug>)
     path('product/<slug:slug>/', product_views.product_detail, name='product_detail_root'),
-    path('orders/', include('orders.urls')),
     # isolated management area for the project (custom adminpanel)
     path('admin-panel/', include('adminpanel.urls')),
 ]

@@ -1,4 +1,6 @@
-from django.test import TestCase
+import tempfile
+
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.text import slugify
 
@@ -17,7 +19,7 @@ class ProductListViewTests(TestCase):
 		self.p3 = Product.objects.create(name='Sachet 20x20', category=self.cat2, price=0.30)
 
 	def test_product_list_shows_all_products(self):
-		url = reverse('product_list')
+		url = reverse('products:product_list')
 		resp = self.client.get(url)
 		self.assertEqual(resp.status_code, 200)
 		# all product names should appear
@@ -27,7 +29,7 @@ class ProductListViewTests(TestCase):
 		self.assertIn(self.p3.name, content)
 
 	def test_product_list_filter_by_category(self):
-		url = reverse('product_list')
+		url = reverse('products:product_list')
 		cat_slug = self.cat1.slug
 		resp = self.client.get(f"{url}?category={cat_slug}")
 		self.assertEqual(resp.status_code, 200)
@@ -38,7 +40,7 @@ class ProductListViewTests(TestCase):
 		self.assertNotIn(self.p3.name, content)
 
 	def test_categories_context_contains_slug(self):
-		url = reverse('product_list')
+		url = reverse('products:product_list')
 		resp = self.client.get(url)
 		self.assertIn('categories', resp.context)
 		categories = resp.context['categories']
@@ -53,58 +55,30 @@ class ProductListViewTests(TestCase):
 		resp = self.client.get(url)
 		self.assertEqual(resp.status_code, 200)
 		data = resp.json()
-		expected_keys = {'id', 'name', 'slug', 'image', 'price', 'description', 'size', 'stock_quantity', 'in_stock', 'category'}
+		expected_keys = {'id', 'name', 'slug', 'image', 'price', 'description', 'size', 'category'}
 		self.assertTrue(expected_keys.issubset(set(data.keys())))
+		self.assertNotIn('stock_quantity', data)
+		self.assertNotIn('in_stock', data)
 
 	def test_homepage_root(self):
 		resp = self.client.get('/')
 		self.assertEqual(resp.status_code, 200)
 		content = resp.content.decode('utf-8')
 		# home page should include the hero title text
-		self.assertIn('Matériel d\'emballage professionnel', content)
+		self.assertIn('Découvrez nos produits', content)
 
-	def test_cart_add_and_detail(self):
-		cart_url = reverse('products:cart_add')
-		detail_url = reverse('products:cart_detail')
-		# add p1 to cart
-		resp = self.client.post(cart_url, {'slug': self.p1.slug, 'quantity': 2})
-		# should redirect to cart_detail
-		self.assertEqual(resp.status_code, 302)
+	def test_no_stock_or_cart_on_public_pages(self):
+		for url in ['/', '/products/', f"/product/{self.p1.slug}/"]:
+			content = self.client.get(url).content.decode('utf-8')
+			self.assertNotIn('RUPTURE DE STOCK', content)
+			self.assertNotIn('/products/cart/', content)
 
-		# now view cart
-		resp = self.client.get(detail_url)
+	def test_product_detail_has_whatsapp_quote_link(self):
+		resp = self.client.get(f"/product/{self.p1.slug}/")
 		self.assertEqual(resp.status_code, 200)
 		content = resp.content.decode('utf-8')
-		self.assertIn(self.p1.name, content)
-		self.assertIn('2', content)
-
-	def test_cart_update_remove_clear(self):
-		# add then update then remove then clear
-		cart_url = reverse('products:cart_add')
-		detail_url = reverse('products:cart_detail')
-		update_url = reverse('products:cart_update')
-		remove_url = reverse('products:cart_remove')
-		clear_url = reverse('products:cart_clear')
-
-		self.client.post(cart_url, {'slug': self.p1.slug, 'quantity': 1})
-		self.client.post(cart_url, {'slug': self.p2.slug, 'quantity': 1})
-		resp = self.client.get(detail_url)
-		self.assertEqual(resp.status_code, 200)
-
-		# update quantity of p1 to 3
-		self.client.post(update_url, {'product_id': str(self.p1.id), 'quantity': 3})
-		resp = self.client.get(detail_url)
-		self.assertIn('3', resp.content.decode('utf-8'))
-
-		# remove p2
-		self.client.post(remove_url, {'product_id': str(self.p2.id)})
-		resp = self.client.get(detail_url)
-		self.assertNotIn(self.p2.name, resp.content.decode('utf-8'))
-
-		# clear
-		self.client.post(clear_url)
-		resp = self.client.get(detail_url)
-		self.assertIn('Votre panier est vide', resp.content.decode('utf-8'))
+		self.assertIn('https://wa.me/', content)
+		self.assertIn('Demander un devis', content)
 
 
 class ProductSizesTests(TestCase):
@@ -121,8 +95,8 @@ class ProductSizesTests(TestCase):
 	def test_sizes_view_shows_sizes(self):
 		# create sizes
 		from .models import ProductSize
-		ProductSize.objects.create(product=self.product, label='10x14', price=12.50, stock=10)
-		ProductSize.objects.create(product=self.product, label='14x18', price=18.00, stock=5)
+		ProductSize.objects.create(product=self.product, label='10x14', price=12.50)
+		ProductSize.objects.create(product=self.product, label='14x18', price=18.00)
 
 		url = reverse('products:product_sizes', args=[self.product.id])
 		resp = self.client.get(url)
@@ -143,6 +117,14 @@ class ProductSizesTests(TestCase):
 		self.assertIn(ProductSize, inline_models)
 
 
+# Store uploads on disk during tests instead of Cloudinary.
+@override_settings(
+	MEDIA_ROOT=tempfile.mkdtemp(),
+	STORAGES={
+		'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+		'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'},
+	},
+)
 class ProductImageDisplayTests(TestCase):
 	def setUp(self):
 		self.cat = Category.objects.create(name='AvecImage')
@@ -159,7 +141,7 @@ class ProductImageDisplayTests(TestCase):
 		# use save() so Django storage will write the file to MEDIA_ROOT
 		self.product.image.save('test-product-image.png', f, save=True)
 
-		url = reverse('product_list')
+		url = reverse('products:product_list')
 		resp = self.client.get(url)
 		self.assertEqual(resp.status_code, 200)
 		content = resp.content.decode('utf-8')

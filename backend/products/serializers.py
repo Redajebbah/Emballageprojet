@@ -22,8 +22,6 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'price',
             'description',
             'size',
-            'stock_quantity',
-            'in_stock',
             'category',
         ]
 

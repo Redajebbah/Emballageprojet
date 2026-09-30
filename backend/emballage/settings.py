@@ -2,8 +2,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
 import os
+from urllib.parse import urlparse
+
 import dj_database_url
-import cloudinary.utils
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -73,7 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'products.context_processors.cart_count',
+                'products.context_processors.contact_info',
             ],
         },
     },
@@ -81,10 +82,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'emballage.wsgi.application'
 
-# Database (from Render environment variable)
+# WhatsApp number used by the "Demander un devis" buttons (international format, digits only)
+WHATSAPP_NUMBER = os.environ.get('WHATSAPP_NUMBER', '212658283277')
+
+# Database: PostgreSQL from DATABASE_URL (Neon in production).
+# Without DATABASE_URL (local development) we fall back to SQLite.
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
+# Neon suspends idle databases: re-check persistent connections before reuse.
+DATABASES['default']['CONN_HEALTH_CHECKS'] = True
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -110,32 +120,25 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Compatibility fix for django-cloudinary-storage (required)
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-# Cloudinary Storage Configuration
-# Using official SDK util to parse CLOUDINARY_URL and ensure clean, synced credentials
-_curl = os.environ.get('CLOUDINARY_URL', '').strip()
-if _curl:
-    _c = cloudinary.utils.config_from_url(_curl)
+# Media storage: uploaded photos go to Cloudinary when CLOUDINARY_URL is set
+# (format: cloudinary://<api_key>:<api_secret>@<cloud_name>), otherwise to MEDIA_ROOT on disk.
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', '').strip()
+if CLOUDINARY_URL:
+    _cloudinary = urlparse(CLOUDINARY_URL)
     CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': _c.cloud_name,
-        'API_KEY': _c.api_key,
-        'API_SECRET': _c.api_secret,
+        'CLOUD_NAME': _cloudinary.hostname,
+        'API_KEY': _cloudinary.username,
+        'API_SECRET': _cloudinary.password,
         'SECURE': True,
     }
-    # Sync the base library config to match the storage backend
-    cloudinary.config(
-        cloud_name=_c.cloud_name,
-        api_key=_c.api_key,
-        api_secret=_c.api_secret,
-        secure=True
-    )
+    _media_backend = "cloudinary_storage.storage.MediaCloudinaryStorage"
 else:
-    # Minimal fallback
     CLOUDINARY_STORAGE = {}
+    _media_backend = "django.core.files.storage.FileSystemStorage"
 
-# Modern Django Storage Configuration (Django 4.2+)
 STORAGES = {
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": _media_backend,
     },
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",

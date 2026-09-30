@@ -1,4 +1,5 @@
 {% extends 'products/base.html' %}
+{% load whatsapp %}
 {% load static %}
 {% block title %}Accueil — Les meilleures solutions d'emboitage au Maroc{% endblock %}
 
@@ -142,40 +143,20 @@
 
     <div class="product-grid-modern">
       {% for product in products|slice:":8" %}
-      <div class="product-card-modern {% if not product.in_stock %}out-of-stock-card{% endif %}">
+      <div class="product-card-modern">
         <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none"
           style="position:relative; display:block;">
           {% if product.image %}
           <div class="product-img-modern"
-            style="background-image: url('{{ product.image.url }}'); {% if not product.in_stock %}filter: grayscale(30%) opacity(0.7);{% endif %}">
+            style="background-image: url('{{ product.image.url }}');">
           </div>
           {% else %}
           <div class="product-img-modern"
-            style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); {% if not product.in_stock %}filter: opacity(0.7);{% endif %}">
+            style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);">
           </div>
           {% endif %}
 
-          {# Out of stock overlay #}
-          {% if not product.in_stock %}
-          <div
-            style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(201,166,107,0.92), rgba(139,111,71,0.88)); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(2px); border-radius:12px;">
-            <div style="text-align:center; color:white; padding:20px;">
-              <svg width="40" height="40" fill="currentColor" viewBox="0 0 16 16"
-                style="margin-bottom:8px; opacity:0.9;">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                <path
-                  d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
-              </svg>
-              <div
-                style="font-size:15px; font-weight:800; letter-spacing:0.5px; text-shadow:0 2px 4px rgba(0,0,0,0.2);">
-                RUPTURE DE STOCK</div>
-              <div style="font-size:10px; opacity:0.95; font-weight:500; margin-top:2px;">Temporairement indisponible
-              </div>
-            </div>
-          </div>
-          {% endif %}
-
-          <div class="product-info-modern" style="{% if not product.in_stock %}opacity:0.7;{% endif %}">
+          <div class="product-info-modern">
             <div class="product-name-modern">{{ product.name|truncatechars:40 }}</div>
             <div class="d-flex justify-content-between align-items-center mt-2">
               <div class="product-price-modern">{{ product.price }} <small>MAD</small></div>
@@ -186,28 +167,10 @@
           </div>
         </a>
 
-        {% if product.in_stock %}
-        <form action="{% url 'products:cart_add' %}" method="post" class="add-cart-form">
-          {% csrf_token %}
-          <input type="hidden" name="slug" value="{{ product.slug }}">
-          <input type="hidden" name="quantity" value="1">
-          <button class="btn-add-cart" type="submit">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
-              <path
-                d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-            </svg>
-          </button>
-        </form>
-        {% else %}
-        <button class="btn-add-cart" disabled style="opacity:0.4; cursor:not-allowed; background:#6b7280;">
-          <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-            <path
-              d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
-          </svg>
-        </button>
-        {% endif %}
+        <a href="{% whatsapp_url product %}" target="_blank" rel="noopener" class="btn-add-cart"
+          title="Demander un devis sur WhatsApp" aria-label="Demander un devis sur WhatsApp : {{ product.name }}">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
+        </a>
       </div>
       {% endfor %}
     </div>

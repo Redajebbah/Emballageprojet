@@ -12,37 +12,25 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3 mb-3">
+    <div class="col-md-6 mb-3">
       <div class="card p-3 text-center shadow-sm border-0">
         <div class="muted small">Produits</div>
         <div class="h3">{{ total_products }}</div>
       </div>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-md-6 mb-3">
       <div class="card p-3 text-center shadow-sm border-0">
         <div class="muted small">Catégories</div>
         <div class="h3">{{ total_categories }}</div>
-      </div>
-    </div>
-    <div class="col-md-3 mb-3">
-      <div class="card p-3 text-center shadow-sm border-0">
-        <div class="muted small">Stock total</div>
-        <div class="h3">{{ total_stock }}</div>
-      </div>
-    </div>
-    <div class="col-md-3 mb-3">
-      <div class="card p-3 text-center shadow-sm border-0">
-        <div class="muted small">Ruptures</div>
-        <div class="h3">{{ out_of_stock }}</div>
       </div>
     </div>
   </div>
 
   <div class="row mt-4">
     <div class="col-md-8">
-      <h5>Produits faibles en stock</h5>
+      <h5>Derniers produits ajoutés</h5>
       <ul class="list-group mt-2">
-        {% for p in top_low_stock %}
+        {% for p in latest_products %}
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <div>
               <strong>{{ p.name }}</strong>
@@ -54,10 +42,10 @@
                 {% endif %}
               </div>
             </div>
-            <div class="badge bg-warning text-dark">{{ p.stock_quantity }}</div>
+            <a href="{% url 'adminpanel:products_edit' p.pk %}" class="btn btn-sm btn-outline-primary">Éditer</a>
           </li>
         {% empty %}
-          <li class="list-group-item">Aucun produit en faible stock</li>
+          <li class="list-group-item">Aucun produit</li>
         {% endfor %}
       </ul>
     </div>

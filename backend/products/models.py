@@ -22,9 +22,6 @@ class Product(models.Model):
 
     size = models.CharField(max_length=10, choices=SIZE_CHOICES, blank=True, null=True)
 
-    stock_quantity = models.PositiveIntegerField(default=0)
-    in_stock = models.BooleanField(default=True)
-
     image = models.ImageField(upload_to="products/", blank=True, null=True)
     image2 = models.ImageField(upload_to="products/", blank=True, null=True)
     image3 = models.ImageField(upload_to="products/", blank=True, null=True)
@@ -32,11 +29,6 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-
-        # Only auto-set in_stock to False if stock_quantity is 0
-        # This allows manual control when stock_quantity > 0
-        if self.stock_quantity == 0:
-            self.in_stock = False
 
         super().save(*args, **kwargs)
 
@@ -55,7 +47,6 @@ class ProductSize(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sizes')
     label = models.CharField(max_length=64, help_text='Human label for the size, e.g. "10x14"')
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     class Meta:
         ordering = ['product', 'label']
